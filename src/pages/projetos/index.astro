@@ -1,0 +1,294 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import SectionLabel from '../../components/SectionLabel.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import ProjectList from '../../components/ProjectList.astro';
+import CtaBlock from '../../components/CtaBlock.astro';
+
+// Obtenção de todos os projetos da coleção ordenados
+const allProjects = await getCollection('projetos');
+const sortedProjects = allProjects.sort((a, b) => a.data.ordem - b.data.ordem);
+
+// Configuração de proporções editoriais para os cards na grade de projetos
+const cardAspectRatios: ('3:2' | '21:9' | '4:5')[] = [
+  '3:2', '4:5', '4:5', '21:9', '21:9', '3:2'
+];
+---
+
+<Base 
+  title="Projetos" 
+  description="Casas e espaços de trabalho projetados a partir do terreno, da luz e da matéria em Joinville e Santa Catarina. Borges e Robles Arquitetura."
+>
+  <div class="projects-index-page">
+    <div class="container">
+      <!-- Cabeçalho da Página com Título e Contagem -->
+      <header class="page-header mt-lg">
+        <SectionLabel number="01" title="Portfólio de Arquitetura" />
+        
+        <div class="page-title-row mt-sm">
+          <h1 class="page-title">
+            Projetos <span class="projects-count">(<span data-project-count>{allProjects.length}</span>)</span>
+          </h1>
+          <p class="page-lead type-body text-ink-2">
+            Residências unifamiliares, edifícios comerciais e reformas de interiores guiados pela precisão construtiva e resposta ao sítio.
+          </p>
+        </div>
+      </header>
+
+      <!-- Barra de Filtros e Alternador Grade / Lista (seção 6.2) -->
+      <nav class="filter-bar hairline-top hairline-bottom mt-lg" aria-label="Filtros e visualização de projetos">
+        <!-- Filtros como Links de Texto (Anti-cara-de-IA: Proibido pills coloridas) -->
+        <div class="filters-group" role="tablist" aria-label="Filtrar por categoria">
+          <button 
+            type="button" 
+            class="filter-link is-active" 
+            data-filter-btn="todos" 
+            aria-pressed="true"
+          >
+            Todos
+          </button>
+          <span class="filter-separator" aria-hidden="true">·</span>
+          <button 
+            type="button" 
+            class="filter-link" 
+            data-filter-btn="residencial" 
+            aria-pressed="false"
+          >
+            Residencial
+          </button>
+          <span class="filter-separator" aria-hidden="true">·</span>
+          <button 
+            type="button" 
+            class="filter-link" 
+            data-filter-btn="comercial" 
+            aria-pressed="false"
+          >
+            Comercial
+          </button>
+          <span class="filter-separator" aria-hidden="true">·</span>
+          <button 
+            type="button" 
+            class="filter-link" 
+            data-filter-btn="interiores" 
+            aria-pressed="false"
+          >
+            Interiores
+          </button>
+          <span class="filter-separator" aria-hidden="true">·</span>
+          <button 
+            type="button" 
+            class="filter-link" 
+            data-filter-btn="em-andamento" 
+            aria-pressed="false"
+          >
+            Em andamento
+          </button>
+        </div>
+
+        <!-- Alternador Grade ⇄ Lista -->
+        <div class="view-switch-group" aria-label="Alternar modo de exibição">
+          <span class="type-mono-label text-ink-2 switch-label">Modo:</span>
+          <button 
+            type="button" 
+            class="view-switch-btn is-active" 
+            data-view-btn="grid" 
+            aria-pressed="true"
+          >
+            Grade
+          </button>
+          <span class="filter-separator" aria-hidden="true">/</span>
+          <button 
+            type="button" 
+            class="view-switch-btn" 
+            data-view-btn="list" 
+            aria-pressed="false"
+          >
+            Lista
+          </button>
+        </div>
+      </nav>
+
+      <!-- Área de Conteúdo dos Projetos -->
+      <div class="projects-content-area mt-xl">
+        <!-- Visualização 1: Grade de Cards (Padrão) -->
+        <div class="view-grid" data-view="grid">
+          <div class="grid-12 projects-grid-inner">
+            {sortedProjects.map((project, index) => {
+              const ratio = cardAspectRatios[index % cardAspectRatios.length];
+              return (
+                <div class="col-6 grid-card-col">
+                  <ProjectCard 
+                    project={project} 
+                    aspectRatio={ratio} 
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <!-- Visualização 2: Tabela Tipográfica em Lista com Preview no Cursor -->
+        <div class="view-list" data-view="list" style="display: none;">
+          <ProjectList projects={sortedProjects} />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bloco CTA de Final de Página -->
+  <div class="mt-2xl">
+    <CtaBlock 
+      title="Tem um lote ou imóvel em mente?"
+      subtitle="Desenvolvemos estudos de viabilidade e projetos arquitetônicos sob medida para o seu terreno em Joinville e região."
+    />
+  </div>
+</Base>
+
+<script>
+  import { initProjectFilters } from '../../scripts/filter';
+
+  // Inicialização no carregamento de página e nas transições de rota
+  document.addEventListener('astro:page-load', () => {
+    initProjectFilters();
+  });
+</script>
+
+<style>
+  .projects-index-page {
+    width: 100%;
+    padding-bottom: var(--space-xl);
+  }
+
+  .page-header {
+    width: 100%;
+  }
+
+  .page-title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--ink);
+    letter-spacing: -0.025em;
+  }
+
+  .projects-count {
+    font-family: var(--font-mono);
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    color: var(--accent);
+    vertical-align: super;
+  }
+
+  .page-lead {
+    max-width: 50ch;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  /* Barra de Filtros */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) 0;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .filters-group {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+  }
+
+  /* Links de texto sóbrios (anti-pills) */
+  .filter-link {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-2);
+    background: none;
+    border: none;
+    padding: 0.25rem 0;
+    cursor: pointer;
+    position: relative;
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .filter-link:hover {
+    color: var(--ink);
+  }
+
+  .filter-link.is-active {
+    color: var(--ink);
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .filter-separator {
+    color: var(--line);
+    font-family: var(--font-mono);
+  }
+
+  /* Alternador Grade ⇄ Lista */
+  .view-switch-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .switch-label {
+    margin-right: 0.25rem;
+  }
+
+  .view-switch-btn {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-2);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem 0;
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .view-switch-btn:hover {
+    color: var(--ink);
+  }
+
+  .view-switch-btn.is-active {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Grade de Cards */
+  .projects-grid-inner {
+    row-gap: var(--space-xl);
+  }
+
+  @media (max-width: 767px) {
+    .grid-card-col {
+      grid-column: span 12 !important;
+    }
+
+    .filter-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-xs);
+    }
+  }
+</style>
+

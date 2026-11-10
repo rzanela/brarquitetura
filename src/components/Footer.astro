@@ -1,0 +1,223 @@
+---
+import { siteData } from '../data/site';
+import { getRelativeUrl } from '../utils/url';
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer hairline-top">
+  <div class="container footer-main">
+    <div class="grid-12">
+      <!-- Coluna 1: Marca & Registro -->
+      <div class="col-4 footer-col">
+        <div class="footer-brand">
+          <span class="footer-monogram">BR</span>
+          <p class="footer-legal">{siteData.legalName}</p>
+        </div>
+        <p class="type-mono-label footer-cau">
+          CAU/SC: {siteData.cau}
+        </p>
+        <p class="type-body text-ink-2 footer-desc">
+          Arquitetura e interiores de alto padrão. Projetos premiados no Norte Catarinense.
+        </p>
+      </div>
+
+      <!-- Coluna 2: Localização & Horário -->
+      <div class="col-4 footer-col">
+        <div class="footer-section-title type-mono-label">Localização</div>
+        <address class="footer-address">
+          <p class="type-body text-ink">{siteData.address.street}</p>
+          <p class="type-body text-ink-2">{siteData.address.neighborhood}</p>
+          <p class="type-body text-ink-2">{siteData.address.city} — {siteData.address.state}</p>
+          <p class="type-mono-label text-ink-2 mt-xs">{siteData.address.postalCode}</p>
+        </address>
+
+        <div class="footer-geo mt-sm">
+          <span class="type-mono-label text-accent">{siteData.geo.displayCoordinates}</span>
+        </div>
+
+        <div class="footer-hours mt-sm">
+          <span class="type-mono-label">Atendimento:</span>
+          <p class="type-mono-label text-ink-2">{siteData.hours.display}</p>
+        </div>
+      </div>
+
+      <!-- Coluna 3: Contato & Redes -->
+      <div class="col-4 footer-col">
+        <div class="footer-section-title type-mono-label">Contato Direto</div>
+        <ul class="footer-contact-list">
+          <li>
+            <a 
+              href={`https://wa.me/${siteData.contact.whatsapp}?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20BrArq%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto.`}
+              class="footer-link text-accent"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="type-mono-label">WhatsApp</span>
+              <span class="type-body">{siteData.contact.whatsappFormatted} ↗</span>
+            </a>
+          </li>
+          <li>
+            <a href={`tel:${siteData.contact.phone}`} class="footer-link">
+              <span class="type-mono-label">Telefone</span>
+              <span class="type-body text-ink">{siteData.contact.phoneFormatted}</span>
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${siteData.contact.email}`} class="footer-link">
+              <span class="type-mono-label">E-mail</span>
+              <span class="type-body text-ink">{siteData.contact.email}</span>
+            </a>
+          </li>
+          <li>
+            <a 
+              href={siteData.social.instagram} 
+              class="footer-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="type-mono-label">Instagram</span>
+              <span class="type-body text-ink">{siteData.social.instagramHandle} ↗</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra Inferior -->
+  <div class="footer-bottom hairline-top">
+    <div class="container footer-bottom-inner">
+      <div class="footer-copy type-mono-label">
+        © {currentYear} {siteData.name}. Todos os direitos reservados.
+      </div>
+      <div class="footer-legal-links">
+        <a href={getRelativeUrl('/privacidade/')} class="type-mono-label footer-bottom-link">Privacidade (LGPD)</a>
+        <span class="footer-dot" aria-hidden="true">·</span>
+        <span class="type-mono-label text-ink-2">Joinville/SC</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: var(--paper-2);
+    color: var(--ink);
+    margin-top: auto;
+  }
+
+  .footer-main {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .footer-monogram {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .footer-legal {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-2);
+  }
+
+  .footer-cau {
+    margin-top: -0.5rem;
+  }
+
+  .footer-desc {
+    font-size: 0.9375rem;
+    max-width: 24rem;
+    line-height: 1.5;
+  }
+
+  .footer-section-title {
+    color: var(--ink-2);
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .footer-address {
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .footer-address p {
+    font-size: 0.9375rem;
+  }
+
+  .footer-contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .footer-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .footer-link:hover .type-body {
+    color: var(--accent);
+  }
+
+  .mt-xs { margin-top: 0.25rem; }
+  .mt-sm { margin-top: 0.75rem; }
+
+  /* Barra inferior */
+  .footer-bottom {
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .footer-bottom-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  @media (min-width: 768px) {
+    .footer-bottom-inner {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .footer-legal-links {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .footer-bottom-link:hover {
+    color: var(--accent);
+  }
+
+  .footer-dot {
+    color: var(--line);
+  }
+</style>
+

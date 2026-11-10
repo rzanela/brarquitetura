@@ -1,0 +1,164 @@
+---
+import { awardsData } from '../data/premios';
+import { getRelativeUrl } from '../utils/url';
+
+interface Props {
+  limit?: number;
+}
+
+const { limit } = Astro.props;
+const displayAwards = limit ? awardsData.slice(0, limit) : awardsData;
+---
+
+<div class="awards-wrapper">
+  <div class="grid-12">
+    <!-- Coluna Introdutória Editorial -->
+    <div class="col-4 awards-intro">
+      <p class="type-body text-ink-2">
+        A produção do escritório tem sido reconhecida por premiações e veículos dedicados à arquitetura contemporânea e ao rigor construtivo.
+      </p>
+      <div class="mt-md">
+        <a href={getRelativeUrl('/escritorio/#reconhecimento')} class="awards-more-link" aria-label="Ver histórico completo de prêmios e publicações">
+          <span class="type-mono-label">Histórico no escritório</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Coluna de Lista Tipográfica em Linhas com Fio de 1px -->
+    <div class="col-8 awards-list-column">
+      <ul class="awards-list" role="list">
+        {displayAwards.map((item) => (
+          <li class="award-item hairline-bottom">
+            <div class="award-year-col">
+              <span class="type-mono-label text-accent">{item.ano}</span>
+            </div>
+            
+            <div class="award-main-col">
+              <span class="award-title">
+                {item.premio}
+              </span>
+              {item.entidade && (
+                <span class="award-entity type-mono-label text-ink-2">
+                  {item.entidade}
+                </span>
+              )}
+            </div>
+
+            <div class="award-project-col">
+              <span class="type-mono-label text-ink">
+                {item.projeto}
+              </span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  .awards-wrapper {
+    width: 100%;
+  }
+
+  .awards-intro {
+    padding-right: var(--space-md);
+  }
+
+  @media (max-width: 767px) {
+    .awards-intro {
+      grid-column: span 12;
+      margin-bottom: var(--space-md);
+      padding-right: 0;
+    }
+
+    .awards-list-column {
+      grid-column: span 12;
+    }
+  }
+
+  .awards-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--line);
+  }
+
+  .award-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    align-items: baseline;
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+  }
+
+  @media (max-width: 540px) {
+    .award-item {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+
+  .award-year-col {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .award-main-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .award-title {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+
+  .award-entity {
+    font-size: 0.6875rem;
+  }
+
+  .award-project-col {
+    text-align: right;
+  }
+
+  @media (max-width: 540px) {
+    .award-project-col {
+      text-align: left;
+    }
+  }
+
+  .awards-more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .awards-more-link .arrow {
+    font-family: var(--font-mono);
+    transition: transform var(--motion-duration-fast) ease;
+  }
+
+  .awards-more-link:hover {
+    color: var(--accent);
+  }
+
+  .awards-more-link:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .awards-more-link,
+    .awards-more-link .arrow {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>
+

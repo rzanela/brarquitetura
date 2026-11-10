@@ -1,0 +1,185 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+import { getRelativeUrl } from '../utils/url';
+
+const allProjects = await getCollection('projetos');
+// Selecionar 3 projetos para sugestão
+const suggestedProjects = allProjects.slice(0, 3);
+---
+
+<Base 
+  title="Página não encontrada" 
+  description="O endereço acessado não existe ou foi alterado. Conheça nossos projetos de arquitetura em Joinville e região."
+>
+  <div class="page-404">
+    <!-- Bloco Principal do Erro -->
+    <section class="error-hero">
+      <div class="grid-container">
+        <div class="col-12 col-md-10 offset-md-1">
+          <SectionLabel number="00" label="ERRO 404" />
+          
+          <h1 class="error-title mt-md">
+            Página não encontrada
+          </h1>
+          
+          <p class="error-lead type-body text-ink-2 mt-md">
+            O endereço acessado não existe ou foi alterado.
+          </p>
+
+          <div class="error-actions mt-lg">
+            <a href={getRelativeUrl('/')} class="btn-primary">
+              Ir para a página inicial
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+            <a href={getRelativeUrl('/projetos/')} class="btn-secondary">
+              Ver todos os projetos
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fio divisor estrutural -->
+    <div class="grid-container">
+      <div class="col-12 col-md-10 offset-md-1">
+        <hr class="hairline" />
+      </div>
+    </div>
+
+    <!-- Projetos Sugeridos -->
+    <section class="suggested-section">
+      <div class="grid-container">
+        <div class="col-12 col-md-10 offset-md-1">
+          <div class="suggested-header mb-lg">
+            <span class="type-mono-label text-ink-2">PROJETOS EM DESTAQUE</span>
+          </div>
+
+          <div class="suggested-grid">
+            {suggestedProjects.map((project) => (
+              <ProjectCard project={project} aspectRatio="3:2" />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .page-404 {
+    padding-top: calc(var(--header-height) + 2rem);
+    padding-bottom: 6rem;
+  }
+
+  .error-hero {
+    padding: 3rem 0 4rem;
+  }
+
+  @media (min-width: 768px) {
+    .error-hero {
+      padding: 5rem 0 6rem;
+    }
+  }
+
+  .error-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .error-lead {
+    font-size: 1.125rem;
+    max-width: 38ch;
+  }
+
+  .error-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: var(--ink);
+    color: var(--paper);
+    padding: 1rem 1.75rem;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: var(--radius-max);
+    transition: background-color var(--motion-duration-fast) ease;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--accent);
+  }
+
+  .btn-primary .arrow {
+    transition: transform var(--motion-duration-fast) ease;
+  }
+
+  .btn-primary:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    color: var(--ink);
+    padding: 1rem 0;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid var(--line);
+    transition: border-color var(--motion-duration-fast) ease, color var(--motion-duration-fast) ease;
+  }
+
+  .btn-secondary:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .suggested-section {
+    padding-top: 4rem;
+  }
+
+  .suggested-header {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 0.75rem;
+  }
+
+  .suggested-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .suggested-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  .text-ink-2 {
+    color: var(--ink-2);
+  }
+
+  .mt-xs { margin-top: 0.5rem; }
+  .mt-sm { margin-top: 1rem; }
+  .mt-md { margin-top: 1.5rem; }
+  .mt-lg { margin-top: 2.5rem; }
+  .mb-lg { margin-bottom: 2rem; }
+</style>
+

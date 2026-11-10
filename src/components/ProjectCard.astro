@@ -1,0 +1,179 @@
+---
+import { Picture } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { getRelativeUrl } from '../utils/url';
+
+interface Props {
+  project: CollectionEntry<'projetos'>;
+  aspectRatio?: '3:2' | '21:9' | '4:5';
+  sizes?: string;
+  priority?: boolean;
+}
+
+const { 
+  project, 
+  aspectRatio = '3:2', 
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw', 
+  priority = false 
+} = Astro.props;
+
+const { data, id } = project;
+const slug = (data as any).slug || id;
+const projectUrl = getRelativeUrl(`/projetos/${slug}/`);
+---
+
+<article class="project-card" data-project-item data-categoria={data.categoria} data-status={data.status}>
+  <a href={projectUrl} class="project-card-link" aria-label={`Ver projeto ${data.titulo} em ${data.local}`}>
+    <div 
+      class:list={['card-media-wrapper', `ratio-${aspectRatio.replace(':', '-')}`]}
+      transition:name={`project-media-${slug}`}
+    >
+      <Picture
+        src={data.capa}
+        formats={['avif', 'webp']}
+        widths={[480, 800, 1200, 1600]}
+        sizes={sizes}
+        alt={`Fotografia do projeto ${data.titulo} em ${data.local}`}
+        class="card-image"
+        loading={priority ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    </div>
+
+    <div class="card-content mt-sm">
+      <div class="card-meta">
+        <span class="type-mono-label text-accent">{data.categoria}</span>
+        <span class="type-mono-label text-ink-2">·</span>
+        <span class="type-mono-label text-ink-2">{data.local} — {data.ano}</span>
+      </div>
+
+      <h3 class="card-title mt-xs">
+        {data.titulo}
+      </h3>
+
+      <p class="card-summary type-body text-ink-2 mt-xs">
+        {data.resumo}
+      </p>
+
+      <div class="card-link-action mt-sm">
+        <span class="type-mono-label">Ver projeto</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .project-card {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-card-link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+  }
+
+  /* Contêiner de mídia com borda máxima de 2px e sem sombras difusas (seção 3) */
+  .card-media-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--paper-2);
+    border-radius: 2px;
+  }
+
+  .ratio-3-2 {
+    aspect-ratio: 3 / 2;
+  }
+
+  .ratio-21-9 {
+    aspect-ratio: 21 / 9;
+  }
+
+  .ratio-4-5 {
+    aspect-ratio: 4 / 5;
+  }
+
+  /* Imagem com escala precisa de 1.02 em 600ms cubic-bezier(.2,.7,.2,1) conforme seção 4 */
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform var(--motion-duration-slow) cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .project-card-link:hover .card-image {
+    transform: scale(1.02);
+  }
+
+  /* Tipografia do card */
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2vw, 1.85rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .project-card-link:hover .card-title {
+    color: var(--accent);
+  }
+
+  .card-summary {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-link-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--ink);
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .card-link-action .arrow {
+    font-family: var(--font-mono);
+    transition: transform var(--motion-duration-fast) ease;
+  }
+
+  .project-card-link:hover .card-link-action {
+    color: var(--accent);
+  }
+
+  .project-card-link:hover .card-link-action .arrow {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-image,
+    .card-title,
+    .card-link-action,
+    .card-link-action .arrow {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>
+

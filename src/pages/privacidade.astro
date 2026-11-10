@@ -1,0 +1,258 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import { siteData } from '../data/site';
+import { getRelativeUrl } from '../utils/url';
+---
+
+<Base 
+  title="Política de Privacidade" 
+  description="Política de Privacidade e Proteção de Dados da Borges e Robles Arquitetura conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018)."
+>
+  <article class="privacy-page">
+    <div class="grid-container">
+      <div class="col-12 col-md-8 offset-md-2 col-lg-7 offset-lg-2">
+        <header class="privacy-header">
+          <SectionLabel number="00" label="POLÍTICA E TERMOS" />
+          
+          <h1 class="privacy-title mt-md">
+            Política de Privacidade e Proteção de Dados
+          </h1>
+          
+          <div class="privacy-meta mt-md">
+            <span class="type-mono-label text-ink-2">CONFORMIDADE COM A LEI GERAL DE PROTEÇÃO DE DADOS (LEI Nº 13.709/2018 — LGPD)</span>
+            <span class="type-mono-label text-ink-2 block mt-xs">ÚLTIMA ATUALIZAÇÃO: NOVEMBRO DE 2026</span>
+          </div>
+        </header>
+
+        <hr class="hairline my-lg" />
+
+        <div class="privacy-body type-body">
+          <section class="privacy-section">
+            <h2 class="section-title">1. Identificação do Controlador</h2>
+            <p>
+              Esta política estabelece o compromisso da <strong>{siteData.legalName}</strong> (nome fantasia <strong>{siteData.name}</strong>), inscrita no CNPJ sob o nº <code>[SUBSTITUIR: CNPJ]</code>, com sede na Rua Lages, 743 — América, Joinville/SC, CEP 89201-205, com a privacidade, transparência e segurança no tratamento dos dados pessoais de seus clientes, parceiros e visitantes deste sítio eletrônico.
+            </p>
+          </section>
+
+          <section class="privacy-section">
+            <h2 class="section-title">2. Princípio da Coleta Mínima</h2>
+            <p>
+              Praticamos a coleta estritamente necessária ao atendimento de solicitações de serviços de arquitetura e urbanismo. Os únicos dados pessoais solicitados em nosso sítio eletrônico são aqueles fornecidos de forma consciente e voluntária no formulário de contato e briefing inicial:
+            </p>
+            <ul class="privacy-list">
+              <li><strong>Identificação pessoal:</strong> Nome completo;</li>
+              <li><strong>Canais de contato:</strong> Endereço de e-mail e número de telefone/WhatsApp;</li>
+              <li><strong>Dados do projeto pretendido:</strong> Município da intervenção, tipologia da edificação (residencial, comercial ou de interiores), metragem quadrada estimada, prazo pretendido e faixa orçamentária;</li>
+              <li><strong>Mensagem livre:</strong> Informações descritivas compartilhadas espontaneamente pelo titular.</li>
+            </ul>
+          </section>
+
+          <section class="privacy-section">
+            <h2 class="section-title">3. Finalidade e Base Legal do Tratamento</h2>
+            <p>
+              O tratamento dos dados pessoais coletados apoia-se nas seguintes bases legais estabelecidas pelo Artigo 7º da LGPD:
+            </p>
+            <ul class="privacy-list">
+              <li><strong>Procedimentos preliminares a contrato (Art. 7º, V):</strong> Avaliar a viabilidade técnica, arquitetônica e orçamentária do projeto solicitado e elaborar proposta de honorários profissionais;</li>
+              <li><strong>Consentimento e contato direto (Art. 7º, I):</strong> Retornar o contato solicitado pelo titular via mensagem eletrônica ou chamada telefônica/WhatsApp;</li>
+              <li><strong>Legítimo interesse (Art. 7º, IX):</strong> Aperfeiçoar a experiência de navegação técnica e comunicação do escritório com potenciais clientes.</li>
+            </ul>
+            <p class="mt-sm">
+              A Borges e Robles Arquitetura <strong>não comercializa, não aluga, não compartilha para fins publicitários e não repassa</strong> seus dados para quaisquer terceiros.
+            </p>
+          </section>
+
+          <section class="privacy-section">
+            <h2 class="section-title">4. Ausência de Cookies Invasivos e Rastreamento Comportamental</h2>
+            <p>
+              Este sítio eletrônico foi concebido sob princípios de engenharia ética e respeito à privacidade:
+            </p>
+            <ul class="privacy-list">
+              <li><strong>Sem cookies invasivos de terceiros:</strong> Não utilizamos cookies de rastreamento publicitário, pixels de retargeting de redes sociais (como Meta Pixel ou TikTok Pixel) nem ferramentas que tracem perfil comportamental individual dos usuários;</li>
+              <li><strong>Métricas técnicas anônimas:</strong> Eventual telemetria de desempenho e contagem de visitantes é processada de maneira agregada, anônima e sem persistência de identificadores pessoais (sem cookies de perfil), em conformidade com as melhores práticas de privacidade por padrão (<em>Privacy by Design</em>).</li>
+            </ul>
+          </section>
+
+          <section class="privacy-section">
+            <h2 class="section-title">5. Compartilhamento Restrito de Infraestrutura</h2>
+            <p>
+              O formulário de briefing utiliza operadores de infraestrutura técnica sob acordos estritos de confidencialidade e segurança, exclusivamente para o trânsito da mensagem eletrônica até os servidores de correio eletrônico corporativo do escritório (Web3Forms/hospedagem estática). Os provedores atuam estritamente como operadores técnicos sob as ordens do controlador.
+            </p>
+          </section>
+
+          <section class="privacy-section">
+            <h2 class="section-title">6. Retenção e Descarte de Dados</h2>
+            <p>
+              Os dados pessoais fornecidos são armazenados pelo período estritamente necessário para:
+            </p>
+            <ul class="privacy-list">
+              <li>Conduzir as negociações preliminares e formalizar o eventual contrato de prestação de serviços de arquitetura;</li>
+              <li>Cumprir obrigações legais, regulatórias e documentais perante o Conselho de Arquitetura e Urbanismo (CAU/SC) e autoridades públicas competentes;</li>
+              <li>Preservar o acervo técnico e histórico dos projetos realizados.</li>
+            </ul>
+            <p class="mt-sm">
+              Findo o período de retenção justificável ou mediante solicitação expressa do titular (quando não houver impedimento legal ou regulatório), os dados serão descartados de forma segura.
+            </p>
+          </section>
+
+          <section class="privacy-section">
+            <h2 class="section-title">7. Direitos do Titular de Dados</h2>
+            <p>
+              Em observância ao Artigo 18 da Lei Federal nº 13.709/2018, o titular de dados possui o direito de solicitar a qualquer momento:
+            </p>
+            <ul class="privacy-list">
+              <li>Confirmação da existência de tratamento de seus dados;</li>
+              <li>Acesso aos dados pessoais mantidos pelo escritório;</li>
+              <li>Correção de dados incompletos, inexatos ou desatualizados;</li>
+              <li>Anonimização, bloqueio ou eliminação de dados desnecessários ou tratados em desconformidade com a LGPD;</li>
+              <li>Revogação do consentimento previamente concedido e eliminação dos dados correspondentes.</li>
+            </ul>
+          </section>
+
+          <section class="privacy-section">
+            <h2 class="section-title">8. Canal de Contato do Encarregado (DPO)</h2>
+            <p>
+              Para exercer quaisquer dos seus direitos previstos pela LGPD, sanar dúvidas ou solicitar esclarecimentos adicionais sobre o tratamento de seus dados, entre em contato diretamente com o responsável pela proteção de dados através do canal formal:
+            </p>
+            <div class="contact-box mt-md">
+              <span class="type-mono-label text-ink-2">CANAL EXCLUSIVO DE PRIVACIDADE E DADOS</span>
+              <p class="contact-email mt-xs">
+                <a href={`mailto:${siteData.contact.email}`} class="link-underlined">
+                  {siteData.contact.email}
+                </a>
+              </p>
+              <p class="type-body text-ink-2 mt-xs">
+                Assunto recomendado: <code>Solicitação LGPD — [Seu Nome]</code>
+              </p>
+              <p class="type-body text-ink-2 mt-xs">
+                Endereço postal: Rua Lages, 743 — América, Joinville/SC, CEP 89201-205.
+              </p>
+            </div>
+          </section>
+        </div>
+
+        <footer class="privacy-footer mt-lg">
+          <hr class="hairline mb-md" />
+          <div class="footer-action">
+            <a href={getRelativeUrl('/')} class="type-mono-label link-back">
+              ← Retornar à página inicial
+            </a>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .privacy-page {
+    padding-top: calc(var(--header-height) + 3rem);
+    padding-bottom: 6rem;
+  }
+
+  .privacy-header {
+    margin-bottom: 2rem;
+  }
+
+  .privacy-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .privacy-meta {
+    line-height: 1.6;
+  }
+
+  .block {
+    display: block;
+  }
+
+  .privacy-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .privacy-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .privacy-list {
+    list-style: disc;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .privacy-list li {
+    line-height: 1.6;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background-color: var(--paper-2);
+    padding: 0.15em 0.4em;
+    border-radius: var(--radius-max);
+  }
+
+  .contact-box {
+    background-color: var(--paper-2);
+    padding: 1.5rem;
+    border-left: 2px solid var(--accent);
+  }
+
+  .contact-email a {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .contact-email a:hover {
+    color: var(--accent);
+  }
+
+  .link-underlined {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .link-back {
+    color: var(--ink);
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .link-back:hover {
+    color: var(--accent);
+  }
+
+  .text-ink-2 {
+    color: var(--ink-2);
+  }
+
+  .mt-xs { margin-top: 0.5rem; }
+  .mt-sm { margin-top: 1rem; }
+  .mt-md { margin-top: 1.5rem; }
+  .mt-lg { margin-top: 2.5rem; }
+  .mb-md { margin-bottom: 1.5rem; }
+  .my-lg { margin-top: 2.5rem; margin-bottom: 2.5rem; }
+</style>
+

@@ -1,0 +1,151 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import { siteData } from '../data/site';
+import { getRelativeUrl } from '../utils/url';
+
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/grid.css';
+import '../styles/type.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  canonicalUrl?: string;
+  showDebugGrid?: boolean;
+  transparentHeader?: boolean;
+  customJsonLd?: Record<string, any>;
+}
+
+const {
+  title,
+  description = siteData.description,
+  image = '/og-default.jpg',
+  type = 'website',
+  canonicalUrl,
+  showDebugGrid = false,
+  transparentHeader = false,
+  customJsonLd,
+} = Astro.props;
+
+const siteTitle = title 
+  ? `${title} — ${siteData.name} | Joinville/SC`
+  : `${siteData.name} — ${siteData.tagline}`;
+
+const canonical = canonicalUrl || new URL(Astro.url.pathname, siteData.url).href;
+const ogImage = new URL(image, siteData.url).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${siteData.url}/#organization`,
+  name: siteData.name,
+  alternateName: siteData.shortName,
+  legalName: siteData.legalName,
+  url: siteData.url,
+  logo: `${siteData.url}/favicon.svg`,
+  image: ogImage,
+  description: siteData.description,
+  telephone: siteData.contact.phone,
+  email: siteData.contact.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: siteData.address.street,
+    addressLocality: siteData.address.city,
+    addressRegion: siteData.address.state,
+    postalCode: siteData.address.postalCode,
+    addressCountry: siteData.address.country
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: siteData.geo.latitude,
+    longitude: siteData.geo.longitude
+  },
+  sameAs: [
+    siteData.social.instagram
+  ],
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: siteData.hours.opens,
+      closes: siteData.hours.closes
+    }
+  ],
+  areaServed: [
+    {
+      '@type': 'City',
+      name: 'Joinville'
+    },
+    {
+      '@type': 'AdministrativeArea',
+      name: 'Norte Catarinense'
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href={getRelativeUrl('/favicon.svg')} />
+    <meta name="base-url" content={getRelativeUrl('/')} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO & Indexação — noindex obrigatório durante a fase de demonstração (seção 12) -->
+    <title>{siteTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph / Redes Sociais -->
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={siteData.name} />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={siteTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Structured Data JSON-LD (Schema.org) -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {customJsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(customJsonLd)} />
+    )}
+
+    <!-- View Transitions nativo do Astro -->
+    <ClientRouter />
+  </head>
+  <body class:list={[{ 'debug-grid-active': showDebugGrid }]}>
+    <!-- Link de Acessibilidade Skip to Content -->
+    <a href="#main-content" class="skip-to-content">Pular para o conteúdo principal</a>
+
+    <!-- Header Fixo Editorial -->
+    <Header transparentOverHero={transparentHeader} />
+
+    <!-- Conteúdo Principal -->
+    <main id="main-content" class:list={[{ 'has-transparent-header': transparentHeader }]}>
+      <slot />
+    </main>
+
+    <!-- Rodapé Editorial -->
+    <Footer />
+
+    <!-- Botão WhatsApp Flutuante Discreto (seção 7.1) -->
+    <WhatsAppFloat />
+  </body>
+</html>
+

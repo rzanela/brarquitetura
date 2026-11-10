@@ -1,0 +1,316 @@
+---
+import { siteData } from '../data/site';
+import { getRelativeUrl } from '../utils/url';
+
+interface Props {
+  currentPath?: string;
+  transparentOverHero?: boolean;
+}
+
+const { currentPath = Astro.url.pathname, transparentOverHero = false } = Astro.props;
+
+const navItems = [
+  { label: 'Projetos', href: getRelativeUrl('/projetos/') },
+  { label: 'Escritório', href: getRelativeUrl('/escritorio/') },
+  { label: 'Contato', href: getRelativeUrl('/contato/') }
+];
+---
+
+<header class:list={['site-header', { 'header-transparent': transparentOverHero }]} id="site-header">
+  <div class="container header-inner">
+    <!-- Wordmark Oficial Provisório -->
+    <a href={getRelativeUrl('/')} class="wordmark" aria-label="Borges e Robles Arquitetura — Página Inicial">
+      <span class="wordmark-monogram">BR</span>
+      <span class="wordmark-divider" aria-hidden="true">/</span>
+      <span class="wordmark-name">Borges e Robles Arquitetura</span>
+    </a>
+
+    <!-- Navegação Desktop -->
+    <nav class="nav-desktop" aria-label="Navegação principal">
+      <ul class="nav-list">
+        {navItems.map((item) => (
+          <li>
+            <a 
+              href={item.href} 
+              class:list={['nav-link', { 'is-active': currentPath.startsWith(item.href) }]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a 
+            href={`https://wa.me/${siteData.contact.whatsapp}?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20BrArq%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto.`}
+            class="nav-link nav-whatsapp"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Conversar pelo WhatsApp"
+          >
+            WhatsApp
+            <span class="arrow" aria-hidden="true">↗</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Botão Menu Mobile (Texto sóbrio, anti-cara-de-IA: sem ícone de 3 risquinhos) -->
+    <button 
+      type="button" 
+      class="mobile-menu-trigger" 
+      data-menu-toggle 
+      aria-expanded="false" 
+      aria-controls="mobile-overlay"
+      aria-label="Abrir menu de navegação"
+    >
+      Menu
+    </button>
+  </div>
+
+  <!-- Overlay Mobile em tela cheia -->
+  <div id="mobile-overlay" class="mobile-overlay" data-menu-overlay aria-hidden="true">
+    <div class="mobile-overlay-inner container">
+      <div class="mobile-overlay-header">
+        <span class="type-mono-label">Navegação</span>
+      </div>
+      <nav class="mobile-nav" aria-label="Navegação mobile">
+        <ul class="mobile-nav-list">
+          <li>
+            <a href={getRelativeUrl('/')} class="mobile-nav-link">Início</a>
+          </li>
+          {navItems.map((item) => (
+            <li>
+              <a href={item.href} class="mobile-nav-link">
+                {item.label}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a 
+              href={`https://wa.me/${siteData.contact.whatsapp}?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20BrArq%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto.`}
+              class="mobile-nav-link mobile-whatsapp"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WhatsApp <span class="arrow" aria-hidden="true">↗</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="mobile-overlay-footer hairline-top">
+        <p class="type-mono-label">{siteData.address.fullFormatted}</p>
+        <p class="type-mono-label">{siteData.geo.displayCoordinates}</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  import { initMenu } from '../scripts/menu';
+  initMenu();
+
+  // Tratamento de rolagem do header (vira --paper com fio de 1px)
+  const header = document.getElementById('site-header');
+  function handleScroll() {
+    if (!header) return;
+    if (window.scrollY > 20) {
+      header.classList.add('is-scrolled');
+    } else {
+      header.classList.remove('is-scrolled');
+    }
+  }
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  document.addEventListener('astro:page-load', () => {
+    handleScroll();
+  });
+  handleScroll();
+</script>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    height: var(--header-height);
+    background-color: var(--paper);
+    border-bottom: 1px solid var(--line);
+    transition: background-color var(--motion-duration-fast) ease, border-color var(--motion-duration-fast) ease;
+  }
+
+  .site-header.header-transparent:not(.is-scrolled) {
+    background-color: transparent;
+    border-bottom: 1px solid transparent;
+  }
+
+  .header-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Wordmark */
+  .wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .wordmark-monogram {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+  }
+
+  .wordmark-divider {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--line);
+  }
+
+  .wordmark-name {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-2);
+  }
+
+  /* Desktop Nav */
+  .nav-desktop {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .nav-desktop {
+      display: block;
+    }
+    .mobile-menu-trigger {
+      display: none;
+    }
+  }
+
+  .nav-list {
+    display: flex;
+    align-items: center;
+    gap: 2.25rem;
+  }
+
+  .nav-link {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-2);
+    position: relative;
+    padding: 0.25rem 0;
+  }
+
+  .nav-link:hover,
+  .nav-link.is-active {
+    color: var(--ink);
+  }
+
+  .nav-link.is-active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--accent);
+  }
+
+  .nav-whatsapp {
+    color: var(--accent);
+  }
+
+  .nav-whatsapp .arrow {
+    display: inline-block;
+    font-size: 0.85em;
+    margin-left: 0.2em;
+    transition: transform var(--motion-duration-fast) ease;
+  }
+
+  .nav-whatsapp:hover .arrow {
+    transform: translate(2px, -2px);
+  }
+
+  /* Trigger Mobile */
+  .mobile-menu-trigger {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  /* Overlay Mobile */
+  .mobile-overlay {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    height: calc(100vh - var(--header-height));
+    background-color: var(--paper);
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity var(--motion-duration-base) var(--motion-ease), visibility var(--motion-duration-base);
+  }
+
+  .mobile-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .mobile-overlay-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .mobile-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .mobile-nav-link {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    line-height: 1.1;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .mobile-nav-link:hover {
+    color: var(--accent);
+  }
+
+  .mobile-whatsapp {
+    color: var(--accent);
+  }
+
+  .mobile-overlay-footer {
+    padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+</style>
+

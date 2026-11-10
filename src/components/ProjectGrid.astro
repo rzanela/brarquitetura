@@ -1,0 +1,117 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+import { getRelativeUrl } from '../utils/url';
+
+interface Props {
+  projects: CollectionEntry<'projetos'>[];
+  totalProjectsCount?: number;
+}
+
+const { projects, totalProjectsCount = projects.length } = Astro.props;
+
+// Definição das colunas assimétricas para cada índice da grade (seção 6.1: alternando 7/5, 4/8, 12)
+const layoutConfigs: { colClass: string; ratio: '3:2' | '21:9' | '4:5' }[] = [
+  { colClass: 'col-7', ratio: '3:2' },
+  { colClass: 'col-5', ratio: '4:5' },
+  { colClass: 'col-4', ratio: '4:5' },
+  { colClass: 'col-8', ratio: '21:9' },
+  { colClass: 'col-12', ratio: '21:9' },
+  { colClass: 'col-7', ratio: '3:2' },
+];
+---
+
+<div class="project-grid-section">
+  <div class="grid-12 asymmetric-project-grid">
+    {projects.map((project, index) => {
+      const config = layoutConfigs[index % layoutConfigs.length];
+      return (
+        <div class:list={['grid-item', config.colClass]}>
+          <ProjectCard 
+            project={project} 
+            aspectRatio={config.ratio}
+            sizes={config.colClass === 'col-12' ? '100vw' : config.colClass === 'col-8' || config.colClass === 'col-7' ? '(max-width: 768px) 100vw, 65vw' : '(max-width: 768px) 100vw, 40vw'}
+          />
+        </div>
+      );
+    })}
+  </div>
+
+  <!-- Link de navegação para o índice completo de projetos -->
+  <div class="grid-footer hairline-top mt-xl">
+    <div class="grid-footer-inner">
+      <span class="type-mono-label text-ink-2">
+        Seleção editorial de projetos recentes
+      </span>
+
+      <a href={getRelativeUrl('/projetos/')} class="all-projects-link" aria-label="Ver todos os projetos do escritório">
+        <span class="type-mono-label">Todos os projetos ({totalProjectsCount})</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .project-grid-section {
+    width: 100%;
+  }
+
+  .asymmetric-project-grid {
+    row-gap: var(--space-xl);
+  }
+
+  .grid-item {
+    display: flex;
+  }
+
+  /* No mobile, todos os itens empilham naturalmente em 12 colunas */
+  @media (max-width: 767px) {
+    .grid-item {
+      grid-column: span 12 !important;
+    }
+  }
+
+  .grid-footer {
+    padding-top: var(--space-md);
+  }
+
+  .grid-footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .all-projects-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .all-projects-link .arrow {
+    font-family: var(--font-mono);
+    transition: transform var(--motion-duration-fast) ease;
+  }
+
+  .all-projects-link:hover {
+    color: var(--accent);
+  }
+
+  .all-projects-link:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .all-projects-link,
+    .all-projects-link .arrow {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>
+

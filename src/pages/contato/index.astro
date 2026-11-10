@@ -1,0 +1,318 @@
+---
+import Base from '../../layouts/Base.astro';
+import SectionLabel from '../../components/SectionLabel.astro';
+import BriefingForm from '../../components/BriefingForm.astro';
+import { siteData } from '../../data/site';
+import { buildWhatsAppUrl } from '../../data/whatsapp';
+import { getRelativeUrl } from '../../utils/url';
+
+// Captura opcional do parâmetro ?projeto= da URL
+const initialProject = Astro.url.searchParams.get('projeto') || undefined;
+
+const whatsappDirectUrl = buildWhatsAppUrl({
+  origem: initialProject ? 'projeto' : 'geral',
+  projetoNome: initialProject
+});
+---
+
+<Base
+  title="Contato e Briefing"
+  description="Inicie o briefing do seu projeto de arquitetura ou converse diretamente com os arquitetos da Borges e Robles em Joinville/SC."
+>
+  <div class="contact-page">
+    <div class="container">
+      <!-- Cabeçalho Editorial -->
+      <header class="contact-header mt-lg">
+        <SectionLabel number="01" title="Contato & Novos Projetos" />
+        <h1 class="contact-page-title mt-sm">
+          Vamos conversar sobre o seu projeto?
+        </h1>
+        <p class="type-body text-ink-2 contact-page-lead mt-xs">
+          Preencha o briefing preliminar ou entre em contato diretamente pelo WhatsApp para agendar uma reunião no nosso ateliê.
+        </p>
+      </header>
+
+      <!-- Grade Principal em 2 Colunas (seção 6.5) -->
+      <div class="grid-12 contact-main-grid mt-xl">
+        <!-- Coluna Esquerda (7 colunas): Briefing em Etapas -->
+        <section class="col-7 briefing-col" aria-labelledby="briefing-title">
+          <div class="briefing-intro hairline-bottom pb-sm">
+            <h2 id="briefing-title" class="column-subtitle">
+              Briefing inicial de arquitetura
+            </h2>
+            <p class="type-body text-ink-2 mt-xs">
+              4 etapas rápidas para compreendermos seu terreno, escopo e intenções construtivas.
+            </p>
+          </div>
+
+          <div class="mt-md">
+            <BriefingForm initialProject={initialProject} />
+          </div>
+        </section>
+
+        <!-- Coluna Direita (5 colunas): Contato Direto, Endereço e Mapa Estático -->
+        <aside class="col-5 sidebar-col" aria-label="Informações de contato e endereço">
+          <div class="sidebar-inner">
+            <SectionLabel number="02" title="Atendimento Direto" />
+
+            <!-- Contatos Imediatos -->
+            <div class="direct-contact-box mt-md">
+              <a 
+                href={whatsappDirectUrl} 
+                class="contact-direct-link btn-whatsapp-direct" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label="Conversar pelo WhatsApp oficial"
+              >
+                <div class="contact-link-header">
+                  <span class="type-mono-label text-accent">WhatsApp Oficial</span>
+                  <span class="arrow" aria-hidden="true">↗</span>
+                </div>
+                <p class="contact-value type-mono-label text-ink mt-xs">
+                  {siteData.contact.whatsappFormatted}
+                </p>
+                <p class="type-body text-ink-2 mt-xs contact-hint">
+                  Atendimento ágil para dúvidas iniciais e agendamento de reuniões.
+                </p>
+              </a>
+
+              <div class="contact-lines-list mt-md hairline-top pt-sm">
+                <div class="contact-line">
+                  <span class="type-mono-label text-ink-2">E-mail:</span>
+                  <a href={`mailto:${siteData.contact.email}`} class="contact-text-link type-body text-ink">
+                    {siteData.contact.email}
+                  </a>
+                </div>
+
+                <div class="contact-line mt-xs">
+                  <span class="type-mono-label text-ink-2">Telefone:</span>
+                  <a href={`tel:${siteData.contact.phone}`} class="contact-text-link type-body text-ink">
+                    {siteData.contact.phoneFormatted}
+                  </a>
+                </div>
+
+                <div class="contact-line mt-xs">
+                  <span class="type-mono-label text-ink-2">Instagram:</span>
+                  <a href={siteData.social.instagram} target="_blank" rel="noopener noreferrer" class="contact-text-link type-body text-ink">
+                    {siteData.social.instagramHandle} ↗
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Localização e Mapa Estático Leve (seção 6.5: link para Google Maps, sem iframe pesado) -->
+            <div class="location-box mt-xl hairline-top pt-md">
+              <span class="type-mono-label text-accent">Nosso Ateliê</span>
+              <address class="office-address-block mt-xs">
+                <p class="type-body text-ink font-medium">{siteData.address.street}</p>
+                <p class="type-body text-ink-2">{siteData.address.neighborhood}</p>
+                <p class="type-body text-ink-2">{siteData.address.city} — {siteData.address.state}</p>
+                <p class="type-mono-label text-ink-2 mt-xs">{siteData.address.postalCode}</p>
+              </address>
+
+              <div class="office-hours mt-sm">
+                <span class="type-mono-label text-ink-2">Horário de atendimento:</span>
+                <p class="type-mono-label text-ink">{siteData.hours.display}</p>
+              </div>
+
+              <!-- Imagem estática leve que vira link para o Google Maps -->
+              <div class="static-map-wrapper mt-md">
+                <a 
+                  href="https://maps.google.com/?q=Rua+Lages,+743+-+Joinville,+SC" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  class="static-map-link"
+                  aria-label="Abrir endereço da Borges e Robles Arquitetura no Google Maps"
+                >
+                  <img 
+                    src={getRelativeUrl('/mapa-joinville.svg')} 
+                    alt="Mapa estilizado da localização da Borges e Robles Arquitetura na Rua Lages, 743 em Joinville/SC" 
+                    class="static-map-image" 
+                    width="800" 
+                    height="480" 
+                    loading="lazy" 
+                  />
+                  <div class="map-overlay-badge">
+                    <span class="type-mono-label">Abrir no Google Maps</span>
+                    <span class="arrow" aria-hidden="true">↗</span>
+                  </div>
+                </a>
+              </div>
+
+              <div class="geo-coordinates mt-xs">
+                <span class="type-mono-label text-ink-2">
+                  {siteData.geo.displayCoordinates}
+                </span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .contact-page {
+    width: 100%;
+    padding-bottom: var(--space-2xl);
+  }
+
+  .contact-page-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--ink);
+    letter-spacing: -0.025em;
+  }
+
+  .contact-page-lead {
+    max-width: 60ch;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  .contact-main-grid {
+    row-gap: var(--space-2xl);
+  }
+
+  .column-subtitle {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.2vw, 2rem);
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+  }
+
+  /* Coluna Direta / Sidebar */
+  .sidebar-inner {
+    background-color: var(--paper-2);
+    padding: var(--space-md);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+  }
+
+  .btn-whatsapp-direct {
+    display: block;
+    background-color: var(--paper);
+    border: 1px solid var(--line);
+    padding: var(--space-sm);
+    border-radius: 2px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--motion-duration-fast) ease;
+  }
+
+  .btn-whatsapp-direct:hover {
+    border-color: var(--accent);
+  }
+
+  .contact-link-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .contact-value {
+    font-size: 1.125rem;
+    font-weight: 500;
+  }
+
+  .contact-hint {
+    font-size: 0.875rem;
+  }
+
+  .contact-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .contact-text-link {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .contact-text-link:hover {
+    color: var(--accent);
+  }
+
+  .office-address-block {
+    font-style: normal;
+  }
+
+  .font-medium {
+    font-weight: 500;
+  }
+
+  /* Mapa Estático */
+  .static-map-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    background-color: var(--paper);
+  }
+
+  .static-map-link {
+    display: block;
+    position: relative;
+    width: 100%;
+    text-decoration: none;
+  }
+
+  .static-map-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--motion-duration-slow) ease;
+  }
+
+  .static-map-link:hover .static-map-image {
+    transform: scale(1.02);
+  }
+
+  .map-overlay-badge {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    background-color: var(--ink);
+    color: var(--paper);
+    padding: 0.35rem 0.65rem;
+    border-radius: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.6875rem;
+    transition: background-color var(--motion-duration-fast) ease;
+  }
+
+  .static-map-link:hover .map-overlay-badge {
+    background-color: var(--accent);
+  }
+
+  .geo-coordinates {
+    font-size: 0.6875rem;
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 899px) {
+    .briefing-col,
+    .sidebar-col {
+      grid-column: span 12 !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .static-map-image {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>
+

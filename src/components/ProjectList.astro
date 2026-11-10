@@ -1,0 +1,231 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getRelativeUrl } from '../utils/url';
+
+interface Props {
+  projects: CollectionEntry<'projetos'>[];
+}
+
+const { projects } = Astro.props;
+
+const formatCategoria = {
+  residencial: 'Residencial',
+  comercial: 'Comercial',
+  interiores: 'Interiores'
+};
+---
+
+<div class="project-list-wrapper">
+  <!-- Tabela Tipográfica Editorial -->
+  <table class="project-table" aria-label="Lista cronológica e tipológica de projetos">
+    <thead>
+      <tr class="hairline-bottom">
+        <th class="type-mono-label th-name" scope="col">Projeto</th>
+        <th class="type-mono-label th-cat" scope="col">Categoria</th>
+        <th class="type-mono-label th-loc" scope="col">Local</th>
+        <th class="type-mono-label th-year" scope="col">Ano</th>
+        <th class="type-mono-label th-action" scope="col">
+          <span class="sr-only">Ação</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {projects.map((project) => {
+        const { data, id } = project;
+        const slug = (data as any).slug || id;
+        const projectUrl = getRelativeUrl(`/projetos/${slug}/`);
+
+        return (
+          <tr 
+            class="project-row hairline-bottom" 
+            data-project-item 
+            data-categoria={data.categoria} 
+            data-status={data.status}
+            data-preview-src={data.capa.src}
+          >
+            <td class="td-name">
+              <a href={projectUrl} class="project-row-link">
+                <span class="project-row-title">{data.titulo}</span>
+                {data.status === 'em-andamento' && (
+                  <span class="status-badge type-mono-label text-accent">[Em andamento]</span>
+                )}
+              </a>
+            </td>
+            <td class="td-cat">
+              <span class="type-mono-label text-ink-2">
+                {formatCategoria[data.categoria]}
+              </span>
+            </td>
+            <td class="td-loc">
+              <span class="type-mono-label text-ink-2">
+                {data.local}
+              </span>
+            </td>
+            <td class="td-year">
+              <span class="type-mono-label text-ink">
+                {data.ano}
+              </span>
+            </td>
+            <td class="td-action">
+              <a href={projectUrl} class="row-arrow" aria-label={`Ver projeto ${data.titulo}`}>
+                <span class="type-mono-label">Ver →</span>
+              </a>
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+
+  <!-- Preview flutuante seguindo o cursor no desktop (Anti-cara-de-IA: sem sombras difusas, cantos 2px) -->
+  <div class="cursor-preview" data-cursor-preview aria-hidden="true">
+    <div class="cursor-preview-inner">
+      <img src="" alt="" class="cursor-preview-img" />
+    </div>
+  </div>
+</div>
+
+<style>
+  .project-list-wrapper {
+    width: 100%;
+    position: relative;
+    overflow-x: auto;
+  }
+
+  .project-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  th {
+    padding: var(--space-xs) 0;
+    font-weight: 400;
+    color: var(--ink-2);
+  }
+
+  td {
+    padding: var(--space-sm) 0;
+    vertical-align: baseline;
+  }
+
+  .th-name, .td-name {
+    width: 40%;
+  }
+
+  .th-cat, .td-cat {
+    width: 20%;
+  }
+
+  .th-loc, .td-loc {
+    width: 20%;
+  }
+
+  .th-year, .td-year {
+    width: 10%;
+  }
+
+  .th-action, .td-action {
+    width: 10%;
+    text-align: right;
+  }
+
+  .project-row {
+    transition: background-color var(--motion-duration-fast) ease;
+  }
+
+  .project-row:hover {
+    background-color: var(--paper-2);
+  }
+
+  .project-row-link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .project-row-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.2;
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .project-row:hover .project-row-title {
+    color: var(--accent);
+  }
+
+  .status-badge {
+    font-size: 0.6875rem;
+  }
+
+  .row-arrow {
+    color: var(--ink-2);
+    text-decoration: none;
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .project-row:hover .row-arrow {
+    color: var(--accent);
+  }
+
+  /* Cursor Preview Flutuante */
+  .cursor-preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 160px;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity var(--motion-duration-fast) ease;
+    display: none;
+  }
+
+  @media (min-width: 992px) {
+    .cursor-preview {
+      display: block;
+    }
+  }
+
+  .cursor-preview-inner {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+  }
+
+  .cursor-preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (max-width: 767px) {
+    .th-loc, .td-loc,
+    .th-action, .td-action {
+      display: none;
+    }
+
+    .th-name, .td-name {
+      width: 55%;
+    }
+
+    .th-cat, .td-cat {
+      width: 30%;
+    }
+
+    .th-year, .td-year {
+      width: 15%;
+      text-align: right;
+    }
+  }
+</style>
+

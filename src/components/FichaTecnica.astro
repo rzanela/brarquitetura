@@ -1,0 +1,139 @@
+---
+interface Props {
+  local: string;
+  ano: number;
+  area_m2?: number;
+  categoria: 'residencial' | 'comercial' | 'interiores';
+  status: 'concluido' | 'em-andamento';
+  equipe?: string[];
+  fotografia?: string;
+  premios?: string[];
+}
+
+const {
+  local,
+  ano,
+  area_m2,
+  categoria,
+  status,
+  equipe,
+  fotografia,
+  premios,
+} = Astro.props;
+
+const formatCategoria = {
+  residencial: 'Residencial',
+  comercial: 'Comercial',
+  interiores: 'Interiores'
+}[categoria];
+
+const formatStatus = {
+  concluido: 'Concluído',
+  'em-andamento': 'Em andamento'
+}[status];
+---
+
+<div class="ficha-tecnica-wrapper">
+  <div class="ficha-header hairline-bottom">
+    <span class="type-mono-label text-accent">Ficha Técnica</span>
+  </div>
+
+  <dl class="ficha-grid mt-sm">
+    <div class="ficha-item">
+      <dt class="type-mono-label text-ink-2">Localização</dt>
+      <dd class="type-mono-label text-ink">{local}</dd>
+    </div>
+
+    <div class="ficha-item">
+      <dt class="type-mono-label text-ink-2">Ano</dt>
+      <dd class="type-mono-label text-ink">{ano}</dd>
+    </div>
+
+    {area_m2 && (
+      <div class="ficha-item">
+        <dt class="type-mono-label text-ink-2">Área Construída</dt>
+        <dd class="type-mono-label text-ink">{area_m2} m²</dd>
+      </div>
+    )}
+
+    <div class="ficha-item">
+      <dt class="type-mono-label text-ink-2">Tipologia</dt>
+      <dd class="type-mono-label text-ink">{formatCategoria}</dd>
+    </div>
+
+    <div class="ficha-item">
+      <dt class="type-mono-label text-ink-2">Fase</dt>
+      <dd class="type-mono-label text-ink">{formatStatus}</dd>
+    </div>
+
+    {equipe && equipe.length > 0 && (
+      <div class="ficha-item ficha-item-full">
+        <dt class="type-mono-label text-ink-2">Autoria e Equipe</dt>
+        <dd class="type-mono-label text-ink">{equipe.join(', ')}</dd>
+      </div>
+    )}
+
+    {fotografia && (
+      <div class="ficha-item ficha-item-full">
+        <dt class="type-mono-label text-ink-2">Fotografia</dt>
+        <dd class="type-mono-label text-ink">{fotografia}</dd>
+      </div>
+    )}
+
+    {premios && premios.length > 0 && (
+      <div class="ficha-item ficha-item-full">
+        <dt class="type-mono-label text-ink-2">Distinções</dt>
+        <dd class="type-mono-label text-accent">{premios.join(' · ')}</dd>
+      </div>
+    )}
+  </dl>
+</div>
+
+<style>
+  .ficha-tecnica-wrapper {
+    width: 100%;
+    padding: var(--space-md) 0;
+  }
+
+  .ficha-header {
+    padding-bottom: var(--space-xs);
+  }
+
+  .ficha-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm) var(--space-md);
+  }
+
+  @media (max-width: 599px) {
+    .ficha-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-xs);
+    }
+  }
+
+  .ficha-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding-bottom: var(--space-xs);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .ficha-item-full {
+    grid-column: 1 / -1;
+  }
+
+  .ficha-item dt {
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ficha-item dd {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    margin: 0;
+  }
+</style>
+

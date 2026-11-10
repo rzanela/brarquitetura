@@ -1,0 +1,178 @@
+---
+import Base from '../../layouts/Base.astro';
+import SectionLabel from '../../components/SectionLabel.astro';
+import { buildWhatsAppUrl } from '../../data/whatsapp';
+import { getRelativeUrl } from '../../utils/url';
+
+// A página lê os parâmetros ?nome= e ?projeto= se disponíveis na URL
+const clientName = Astro.url.searchParams.get('nome') || '';
+const projectName = Astro.url.searchParams.get('projeto') || '';
+
+const whatsappPostBriefingUrl = buildWhatsAppUrl({
+  origem: 'pos-briefing',
+  clienteNome: clientName || '[Seu Nome]'
+});
+---
+
+<Base
+  title="Briefing Enviado"
+  description="Recebemos as informações preliminares do seu projeto. Retornaremos em até 1 dia útil."
+>
+  <div class="thank-you-page">
+    <div class="container">
+      <div class="grid-12">
+        <div class="col-8 offset-2 thank-you-card mt-2xl">
+          <SectionLabel number="01" title="Confirmação de Recebimento" />
+
+          <h1 class="thank-you-title mt-md">
+            Recebemos seu briefing com sucesso.
+          </h1>
+
+          <p class="thank-you-lead type-body mt-md">
+            {clientName 
+              ? `Obrigado, ${clientName}. Suas informações foram registradas com sucesso no escritório.`
+              : 'Suas informações foram registradas com sucesso no escritório.'
+            }
+          </p>
+
+          <div class="thank-you-notice-box mt-md">
+            <span class="type-mono-label text-accent">Prazo de Retorno:</span>
+            <p class="type-body text-ink mt-xs">
+              Analisamos as características do lote ou imóvel e respondemos em até <strong>1 dia útil</strong> com um primeiro diagnóstico de viabilidade e sugestão de data para a nossa conversa inicial.
+            </p>
+            {projectName && (
+              <p class="type-mono-label text-ink-2 mt-xs">
+                Projeto citado como referência: <strong>{projectName}</strong>
+              </p>
+            )}
+          </div>
+
+          <!-- Ação Imediata: WhatsApp Pós-Briefing (seção 7.2) -->
+          <div class="whatsapp-immediate-action mt-xl hairline-top pt-lg">
+            <span class="type-mono-label text-ink-2">Deseja adiantar o contato ou enviar fotos do terreno?</span>
+            <div class="mt-sm">
+              <a 
+                href={whatsappPostBriefingUrl} 
+                class="btn-pos-briefing-whatsapp"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Avisar os arquitetos pelo WhatsApp que você enviou um briefing"
+              >
+                <span>Avisar envio pelo WhatsApp</span>
+                <span class="arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Links de Navegação -->
+          <div class="back-navigation mt-xl hairline-top pt-md">
+            <a href={getRelativeUrl('/projetos/')} class="nav-return-link">
+              <span class="arrow" aria-hidden="true">←</span>
+              <span class="type-mono-label">Explorar mais projetos</span>
+            </a>
+            <span class="sep" aria-hidden="true">·</span>
+            <a href={getRelativeUrl('/')} class="nav-return-link">
+              <span class="type-mono-label">Voltar à página inicial</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .thank-you-page {
+    width: 100%;
+    padding-bottom: var(--space-2xl);
+  }
+
+  .thank-you-card {
+    background-color: var(--paper-2);
+    padding: var(--space-xl);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+  }
+
+  .thank-you-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .thank-you-lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .thank-you-notice-box {
+    background-color: var(--paper);
+    padding: var(--space-md);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 2px 2px 0;
+  }
+
+  .btn-pos-briefing-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--ink);
+    color: var(--paper);
+    padding: 0.85rem 1.65rem;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    border-radius: 2px;
+    border: 1px solid var(--ink);
+    transition: background-color var(--motion-duration-fast) ease, border-color var(--motion-duration-fast) ease;
+  }
+
+  .btn-pos-briefing-whatsapp:hover {
+    background-color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .btn-pos-briefing-whatsapp .arrow {
+    font-family: var(--font-mono);
+  }
+
+  .back-navigation {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .nav-return-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .nav-return-link:hover {
+    color: var(--accent);
+  }
+
+  .sep {
+    color: var(--line);
+    font-family: var(--font-mono);
+  }
+
+  @media (max-width: 767px) {
+    .thank-you-card {
+      grid-column: span 12 !important;
+      margin-left: 0 !important;
+      padding: var(--space-md);
+    }
+  }
+</style>
+

@@ -1,0 +1,623 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import CtaBlock from '../components/CtaBlock.astro';
+import { awardsData } from '../data/premios';
+import { siteData } from '../data/site';
+
+// Importação das fotografias institucionais locais geradas
+import officeHeroImg from '../assets/escritorio/escritorio.jpg';
+import socioBorgesImg from '../assets/escritorio/socio-borges.jpg';
+import socioRoblesImg from '../assets/escritorio/socio-robles.jpg';
+
+const detailedSteps = [
+  {
+    number: "01",
+    title: "Conversa inicial & Diagnóstico",
+    lead: "Entendimento do programa de necessidades, expectativas de vivência e orçamento de obra.",
+    description: "Iniciamos cada trabalho com uma escuta atenta dos desejos da família ou dos objetivos de negócio da empresa. Realizamos visita técnica detalhada ao lote ou imóvel para analisar topografia, orientação solar, ventos predominantes, vegetação existente e condicionantes legais do plano diretor municipal.",
+    deliverables: "Diagnóstico de viabilidade espacial e programa de necessidades alinhado."
+  },
+  {
+    number: "02",
+    title: "Estudo preliminar & Partido",
+    lead: "Definição do partido arquitetônico, da volumetria e da relação do edifício com a paisagem.",
+    description: "Exploramos diferentes opções de implantação através de croquis, modelos tridimensionais e maquetes de estudo. O partido define a entrada da luz natural, a circulação dos ambientes e a proteção climática antes de qualquer avanço técnico.",
+    deliverables: "Plantas baixas esquemáticas, cortes conceituais, perspectivas volumétricas 3D e memorial de partido."
+  },
+  {
+    number: "03",
+    title: "Anteprojeto & Projeto executivo",
+    lead: "O coração técnico da obra: precisão milimétrica e compatibilização total de engenharia.",
+    description: "Desenvolvemos o conjunto completo de desenhos executivos com cotas rigorosas, paginações de pisos e revestimentos, especificação exata de esquadrias, detalhes de marcenaria, serralheria e impermeabilização. Todos os elementos são compatibilizados com os projetos estruturais e complementares.",
+    deliverables: "Caderno executivo completo em pranchas técnicas, caderno de detalhamentos, caderno de marcenaria e memorial descritivo de materiais."
+  },
+  {
+    number: "04",
+    title: "Acompanhamento de obra",
+    lead: "Vistorias técnicas no canteiro para garantir conformidade estética e construtiva.",
+    description: "Acompanhamos o andamento da construção com vistorias periódicas para assegurar que a execução respeite com exatidão o projeto desenhado, os alinhamentos e a textura dos materiais especificados. Esclarecemos dúvidas diretamente com empreiteiros e equipes em campo.",
+    deliverables: "Relatórios periódicos de visita técnica com registro fotográfico e checklist de conformidade."
+  }
+];
+
+const coverageAreas = [
+  {
+    region: "Joinville (Sede)",
+    cities: ["Joinville (Atendimento presencial no ateliê na Rua Lages, 743)"]
+  },
+  {
+    region: "Litoral Norte e Balneários",
+    cities: ["São Francisco do Sul", "Itapoá", "Balneário Barra do Sul", "Balneário Piçarras", "Penha"]
+  },
+  {
+    region: "Vale e Litoral Central",
+    cities: ["Balneário Camboriú", "Itajaí", "Blumenau", "Jaraguá do Sul"]
+  },
+  {
+    region: "Projetos Especiais",
+    cities: ["Outras cidades de Santa Catarina e estados vizinhos sob consulta prévia"]
+  }
+];
+---
+
+<Base
+  title="Escritório"
+  description="Conheça a história, abordagem arquitetônica, sócios e o processo de projeto do escritório Borges e Robles Arquitetura em Joinville/SC."
+>
+  <div class="office-page">
+    <div class="container">
+      <!-- 1. Cabeçalho Institucional & Manifesto -->
+      <header class="office-header mt-lg">
+        <SectionLabel number="01" title="Sobre o Escritório" />
+
+        <div class="grid-12 mt-sm">
+          <div class="col-8">
+            <h1 class="office-main-title">
+              Arquitetura ancorada no sítio, na matéria autêntica e no tempo.
+            </h1>
+          </div>
+          <div class="col-4 office-meta-intro">
+            <span class="type-mono-label text-accent">Ateliê de Projetos</span>
+            <p class="type-mono-label text-ink-2 mt-xs">
+              {siteData.address.street} — Joinville/SC
+            </p>
+            <p class="type-mono-label text-ink-2">
+              Desde [VALIDAR: ano de fundação, ex. 2018]
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <!-- 2. Fotografia do Escritório / Equipe (Full-width editorial) -->
+      <section class="office-hero-media mt-xl" aria-label="Fotografia do escritório na Rua Lages">
+        <div class="office-image-box">
+          <Picture
+            src={officeHeroImg}
+            formats={['avif', 'webp']}
+            widths={[768, 1200, 1920, 2400]}
+            sizes="100vw"
+            alt="Fotografia do ateliê Borges e Robles Arquitetura na Rua Lages, 743 em Joinville"
+            class="office-img"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+
+        <div class="office-caption-row hairline-bottom mt-xs">
+          <span class="type-mono-label text-ink">
+            ATELIÊ BORGES E ROBLES ARQUITETURA — RUA LAGES, 743 — JOINVILLE/SC
+          </span>
+          <span class="type-mono-label text-ink-2">
+            [SUBSTITUIR: Crédito da fotografia do ateliê / equipe]
+          </span>
+        </div>
+      </section>
+
+      <!-- 3. Abordagem Arquitetônica e Filosofia -->
+      <section class="office-manifesto-section mt-2xl" aria-labelledby="approach-label">
+        <div class="grid-12">
+          <div class="col-4">
+            <SectionLabel number="02" title="Abordagem e Princípios" id="approach-label" />
+            <p class="type-body text-ink-2 mt-md approach-lead">
+              Acreditamos que a qualidade de um projeto não está na abundância de ornamentos, mas na precisão com que responde ao seu lugar e às pessoas que nele habitam.
+            </p>
+          </div>
+
+          <div class="col-8 approach-columns">
+            <div class="approach-block">
+              <h2 class="approach-title">Rigor climático e luz natural</h2>
+              <p class="type-body text-ink-2 mt-xs">
+                O clima do Sul exige respostas atentas. Projetamos com beirais generosos para proteção das chuvas torrenciais, fachadas orientadas para captar luz indireta e esquemas eficientes de ventilação cruzada que reduzem a dependência de climatização mecânica.
+              </p>
+            </div>
+
+            <div class="approach-block mt-lg">
+              <h2 class="approach-title">Verdade dos materiais</h2>
+              <p class="type-body text-ink-2 mt-xs">
+                Privilegiamos materiais em sua forma bruta e sincera: concreto aparente moldado in loco com marcas precisas de forma, madeira nativa certificada que adquire nobreza com o passar dos anos, pedra natural e serralheria esbelta. Nada de revestimentos que simulam o que não são.
+              </p>
+            </div>
+
+            <div class="approach-block mt-lg">
+              <h2 class="approach-title">Continuidade entre interior e paisagem</h2>
+              <p class="type-body text-ink-2 mt-xs">
+                A divisão entre dentro e fora é diluída através de caixilhos piso-teto embutidos, pisos que se prolongam sem degraus e jardins que participam visualmente do cotidiano da casa ou do espaço corporativo.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Sócios Fundadores (seção 6.4: fotos, nomes, formação, CAU, bio) -->
+      <section class="office-partners-section mt-2xl hairline-top" aria-labelledby="partners-label">
+        <div class="pt-xl">
+          <SectionLabel number="03" title="Sócios e Direção" id="partners-label" />
+          
+          <div class="grid-12 mt-lg partners-grid">
+            <!-- Sócio 1: Borges -->
+            <article class="col-6 partner-card">
+              <div class="partner-media ratio-4-5">
+                <Picture
+                  src={socioBorgesImg}
+                  formats={['avif', 'webp']}
+                  widths={[480, 800, 1200]}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  alt="Retrato oficial do sócio-fundador Arquiteto Borges"
+                  class="partner-img"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="partner-info mt-md">
+                <span class="type-mono-label text-accent">Sócio-Fundador</span>
+                <h3 class="partner-name mt-xs">
+                  {siteData.partners[0].name}
+                </h3>
+                <p class="type-mono-label text-ink-2 mt-xs">
+                  [SUBSTITUIR: Arquiteto e Urbanista — Instituição de Ensino, Ano]
+                </p>
+                <p class="type-mono-label text-ink mt-xs">
+                  CAU/SC: {siteData.partners[0].cau}
+                </p>
+
+                <p class="type-body text-ink-2 mt-sm partner-bio">
+                  [SUBSTITUIR: Responsável pela concepção arquitetônica, diretrizes conceituais de partido e pesquisa contínua sobre a integração entre forma construída e paisagem em Joinville e litoral.]
+                </p>
+              </div>
+            </article>
+
+            <!-- Sócio 2: Robles -->
+            <article class="col-6 partner-card">
+              <div class="partner-media ratio-4-5">
+                <Picture
+                  src={socioRoblesImg}
+                  formats={['avif', 'webp']}
+                  widths={[480, 800, 1200]}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  alt="Retrato oficial do sócio-fundador Arquiteto Robles"
+                  class="partner-img"
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="partner-info mt-md">
+                <span class="type-mono-label text-accent">Sócio-Fundador</span>
+                <h3 class="partner-name mt-xs">
+                  {siteData.partners[1].name}
+                </h3>
+                <p class="type-mono-label text-ink-2 mt-xs">
+                  [SUBSTITUIR: Arquiteto e Urbanista — Instituição de Ensino, Ano]
+                </p>
+                <p class="type-mono-label text-ink mt-xs">
+                  CAU/SC: {siteData.partners[1].cau}
+                </p>
+
+                <p class="type-body text-ink-2 mt-sm partner-bio">
+                  [SUBSTITUIR: Coordena o desenvolvimento dos projetos executivos, o rigor de detalhamento construtivo e o acompanhamento minucioso de canteiro nas obras de alto padrão do escritório.]
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Processo Detalhado com Entregáveis de Cada Etapa (seção 6.4 item 3) -->
+      <section class="office-process-detailed mt-2xl hairline-top" aria-labelledby="detailed-process-label">
+        <div class="pt-xl">
+          <SectionLabel number="04" title="Metodologia e Entregas" id="detailed-process-label" />
+          
+          <div class="grid-12 mt-md">
+            <div class="col-4">
+              <h2 class="section-heading">Como conduzimos cada projeto</h2>
+              <p class="type-body text-ink-2 mt-sm">
+                Da primeira conversa até a entrega das chaves, o processo da BrArq é estruturado com etapas transparentes e documentação técnica rigorosa.
+              </p>
+            </div>
+
+            <div class="col-8 detailed-steps-list">
+              {detailedSteps.map((step) => (
+                <div class="step-card hairline-bottom">
+                  <div class="step-card-header">
+                    <span class="type-mono-label text-accent step-num">{step.number}</span>
+                    <h3 class="step-card-title">{step.title}</h3>
+                  </div>
+
+                  <p class="type-body text-ink step-card-lead mt-xs">
+                    {step.lead}
+                  </p>
+
+                  <p class="type-body text-ink-2 step-card-desc mt-xs">
+                    {step.description}
+                  </p>
+
+                  <div class="deliverable-box mt-sm">
+                    <span class="type-mono-label text-accent">O que você recebe:</span>
+                    <p class="type-mono-label text-ink mt-xs">
+                      {step.deliverables}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Prêmios e Publicações Completos (seção 6.4: id="reconhecimento" alimentado por premios.ts) -->
+      <section class="office-awards-section mt-2xl hairline-top" id="reconhecimento" aria-labelledby="full-awards-label">
+        <div class="pt-xl">
+          <SectionLabel number="05" title="Reconhecimento e Publicações" id="full-awards-label" />
+
+          <div class="grid-12 mt-md">
+            <div class="col-4">
+              <h2 class="section-heading">Distinções e Registro</h2>
+              <p class="type-body text-ink-2 mt-sm">
+                Lista completa de reconhecimentos institucionais, premiações e publicações dedicadas à arquitetura do escritório.
+              </p>
+              <p class="type-mono-label text-ink-2 mt-xs">
+                Apenas dados confirmados e registros oficiais.
+              </p>
+            </div>
+
+            <div class="col-8">
+              <ul class="full-awards-list" role="list">
+                {awardsData.map((item) => (
+                  <li class="full-award-row hairline-bottom">
+                    <div class="award-col-year">
+                      <span class="type-mono-label text-accent">{item.ano}</span>
+                    </div>
+
+                    <div class="award-col-main">
+                      <span class="award-main-title">{item.premio}</span>
+                      {item.entidade && (
+                        <span class="type-mono-label text-ink-2">{item.entidade}</span>
+                      )}
+                      {item.categoria && (
+                        <span class="type-mono-label text-ink-2">· {item.categoria}</span>
+                      )}
+                    </div>
+
+                    <div class="award-col-project">
+                      <span class="type-mono-label text-ink">{item.projeto}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Área de Atuação (seção 6.4: Joinville, Norte Catarinense, litoral) -->
+      <section class="office-coverage-section mt-2xl hairline-top" aria-labelledby="coverage-label">
+        <div class="pt-xl">
+          <SectionLabel number="06" title="Área de Atuação" id="coverage-label" />
+
+          <div class="grid-12 mt-md">
+            <div class="col-4">
+              <h2 class="section-heading">Onde projetamos</h2>
+              <p class="type-body text-ink-2 mt-sm">
+                Com base física em Joinville, o escritório atua em todo o Norte de Santa Catarina, litoral e sob demanda em projetos especiais.
+              </p>
+              <div class="mt-md">
+                <span class="type-mono-label text-ink-2">
+                  [VALIDAR: Cidades e raio de atendimento do escritório]
+                </span>
+              </div>
+            </div>
+
+            <div class="col-8">
+              <div class="coverage-grid">
+                {coverageAreas.map((area) => (
+                  <div class="coverage-block hairline-bottom">
+                    <h3 class="coverage-region-title type-mono-label text-accent">
+                      {area.region}
+                    </h3>
+                    <ul class="coverage-cities-list mt-xs">
+                      {area.cities.map((city) => (
+                        <li class="type-body text-ink">
+                          {city}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Bloco CTA Final da Página -->
+  <div class="mt-2xl">
+    <CtaBlock
+      title="Vamos conversar sobre o seu espaço?"
+      subtitle="Agende uma reunião no nosso ateliê na Rua Lages ou envie as características do seu lote para análise preliminar."
+    />
+  </div>
+</Base>
+
+<style>
+  .office-page {
+    width: 100%;
+    padding-bottom: var(--space-xl);
+  }
+
+  /* Cabeçalho */
+  .office-main-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--ink);
+    letter-spacing: -0.025em;
+  }
+
+  .office-meta-intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 0.5rem;
+  }
+
+  /* Fotografia Hero */
+  .office-hero-media {
+    width: 100%;
+  }
+
+  .office-image-box {
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--paper-2);
+    border-radius: 2px;
+  }
+
+  .office-img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (min-width: 900px) {
+    .office-img {
+      aspect-ratio: 21 / 9;
+      max-height: 75vh;
+    }
+  }
+
+  .office-caption-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding: var(--space-xs) 0;
+    flex-wrap: wrap;
+  }
+
+  /* Abordagem */
+  .approach-lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  .approach-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.2vw, 2rem);
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+  }
+
+  .approach-block p {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    max-width: 65ch;
+  }
+
+  /* Sócios */
+  .partners-grid {
+    row-gap: var(--space-xl);
+  }
+
+  .partner-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (max-width: 767px) {
+    .partner-card {
+      grid-column: span 12 !important;
+    }
+  }
+
+  .partner-media {
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--paper-2);
+    border-radius: 2px;
+  }
+
+  .ratio-4-5 {
+    aspect-ratio: 4 / 5;
+  }
+
+  .partner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(15%);
+    transition: filter var(--motion-duration-slow) ease, transform var(--motion-duration-slow) cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .partner-card:hover .partner-img {
+    filter: grayscale(0%);
+    transform: scale(1.015);
+  }
+
+  .partner-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .partner-bio {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  /* Processo Detalhado */
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+  }
+
+  .detailed-steps-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--line);
+  }
+
+  .step-card {
+    padding: var(--space-md) 0;
+  }
+
+  .step-card-header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-sm);
+  }
+
+  .step-num {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .step-card-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .step-card-lead {
+    font-weight: 500;
+  }
+
+  .step-card-desc {
+    max-width: 65ch;
+    line-height: 1.65;
+  }
+
+  .deliverable-box {
+    background-color: var(--paper-2);
+    padding: var(--space-sm);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* Prêmios Completos */
+  .full-awards-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--line);
+  }
+
+  .full-award-row {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    align-items: baseline;
+    gap: var(--space-md);
+    padding: var(--space-sm) 0;
+  }
+
+  @media (max-width: 640px) {
+    .full-award-row {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+
+  .award-main-title {
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--ink);
+    display: block;
+    line-height: 1.35;
+  }
+
+  .award-col-project {
+    text-align: right;
+  }
+
+  @media (max-width: 640px) {
+    .award-col-project {
+      text-align: left;
+    }
+  }
+
+  /* Área de Atuação */
+  .coverage-grid {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--line);
+  }
+
+  .coverage-block {
+    padding: var(--space-md) 0;
+  }
+
+  .coverage-region-title {
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+  }
+
+  .coverage-cities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .partner-img {
+      transition: none !important;
+      transform: none !important;
+      filter: none !important;
+    }
+  }
+</style>
+

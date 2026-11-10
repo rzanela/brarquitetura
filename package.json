@@ -1,0 +1,22 @@
+{
+  "name": "brarquitetura",
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "node sync.js && cmd /c \"cd /d C:\\Users\\rafael.zanela\\brarq_env && npx astro dev\"",
+    "start": "npm run dev",
+    "build": "node sync.js --build",
+    "preview": "node sync.js && cmd /c \"cd /d C:\\Users\\rafael.zanela\\brarq_env && npx astro preview\"",
+    "astro": "node sync.js && cmd /c \"cd /d C:\\Users\\rafael.zanela\\brarq_env && npx astro\""
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.2.1",
+    "@fontsource/ibm-plex-mono": "^5.1.1",
+    "@fontsource/newsreader": "^5.1.1",
+    "@fontsource/schibsted-grotesk": "^5.1.1",
+    "astro": "^5.4.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}

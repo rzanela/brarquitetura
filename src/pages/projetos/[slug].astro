@@ -1,0 +1,482 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Picture } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import SectionLabel from '../../components/SectionLabel.astro';
+import FichaTecnica from '../../components/FichaTecnica.astro';
+import Gallery from '../../components/Gallery.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import { buildWhatsAppUrl } from '../../data/whatsapp';
+import { siteData } from '../../data/site';
+import { getRelativeUrl } from '../../utils/url';
+
+export async function getStaticPaths() {
+  const projetos = await getCollection('projetos');
+  const sorted = projetos.sort((a, b) => a.data.ordem - b.data.ordem);
+
+  return sorted.map((project, index) => {
+    const slug = (project.data as any).slug || project.id;
+    const nextProject = sorted[(index + 1) % sorted.length];
+    return {
+      params: { slug },
+      props: { project, nextProject },
+    };
+  });
+}
+
+const { project, nextProject } = Astro.props;
+const { data, id } = project;
+const slug = (data as any).slug || id;
+const { Content } = await render(project);
+
+const nextData = nextProject.data;
+const nextSlug = (nextData as any).slug || nextProject.id;
+
+// Links de conversão contextual da seção 7.1
+const whatsappProjectUrl = buildWhatsAppUrl({
+  origem: 'projeto',
+  projetoNome: data.titulo
+});
+const briefingProjectUrl = getRelativeUrl(`/contato/?projeto=${slug}#briefing`);
+
+// Schema.org CreativeWork
+const projectJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  headline: data.titulo,
+  name: data.titulo,
+  description: data.resumo,
+  url: `${siteData.url}/projetos/${slug}/`,
+  image: new URL(data.capa.src, siteData.url).href,
+  dateCreated: data.ano.toString(),
+  creator: {
+    '@type': 'Organization',
+    '@id': `${siteData.url}/#organization`,
+    name: siteData.name,
+  },
+  locationCreated: {
+    '@type': 'Place',
+    name: data.local,
+  },
+  genre: data.categoria,
+  keywords: [data.categoria, data.local, 'Arquitetura de alto padrão', 'Joinville', 'Santa Catarina'],
+};
+---
+
+<Base
+  title={data.titulo}
+  description={data.resumo}
+  image={data.capa.src}
+  type="article"
+  customJsonLd={projectJsonLd}
+>
+  <article class="project-single-page" aria-labelledby="project-main-title">
+    <!-- 1. Hero do Projeto com View Transition associada ao card de origem -->
+    <header class="project-hero">
+      <div 
+        class="project-hero-media"
+        transition:name={`project-media-${slug}`}
+      >
+        <Picture
+          src={data.capa}
+          formats={['avif', 'webp']}
+          widths={[768, 1200, 1920, 2400]}
+          sizes="100vw"
+          alt={`Fotografia principal do projeto ${data.titulo} em ${data.local}`}
+          class="project-hero-img"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Legenda do Hero com Fio de 1px -->
+      <div class="project-hero-meta hairline-bottom">
+        <div class="container hero-meta-inner">
+          <a href={getRelativeUrl('/projetos/')} class="back-link" aria-label="Voltar para a lista de projetos">
+            <span class="arrow" aria-hidden="true">←</span>
+            <span class="type-mono-label">Todos os projetos</span>
+          </a>
+
+          <div class="meta-legend">
+            <span class="type-mono-label text-accent">{data.categoria}</span>
+            <span class="type-mono-label text-ink-2">·</span>
+            <span class="type-mono-label text-ink">{data.local} — {data.ano}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. Área Editorial: Título, Resumo, Texto Crítico e Ficha Técnica -->
+    <section class="project-editorial-section container mt-xl">
+      <div class="grid-12">
+        <!-- Coluna Esquerda (7 colunas): Título, Resumo e Texto Arquitetônico -->
+        <div class="col-7 project-narrative">
+          <SectionLabel number="01" title="Partido e Conceito" />
+
+          <h1 id="project-main-title" class="project-title mt-sm">
+            {data.titulo}
+          </h1>
+
+          <p class="project-lead type-body mt-md">
+            {data.resumo}
+          </p>
+
+          <div class="project-markdown-body mt-lg type-body text-ink-2">
+            <Content />
+          </div>
+        </div>
+
+        <!-- Coluna Direita (5 colunas): Ficha Técnica em 2 Colunas Mono -->
+        <div class="col-5 project-sidebar">
+          <FichaTecnica
+            local={data.local}
+            ano={data.ano}
+            area_m2={data.area_m2}
+            categoria={data.categoria}
+            status={data.status}
+            equipe={data.equipe}
+            fotografia={data.fotografia}
+            premios={data.premios}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Galeria Editorial com Alternância de Formatos e Lightbox em <dialog> -->
+    {data.galeria && data.galeria.length > 0 && (
+      <section class="project-gallery-section container mt-2xl" aria-label="Galeria fotográfica do projeto">
+        <SectionLabel number="02" title="Registro Fotográfico e Espacial" />
+        <Gallery
+          images={data.galeria}
+          projectTitle={data.titulo}
+          location={data.local}
+          excerpt={data.resumo}
+        />
+      </section>
+    )}
+
+    <!-- Componente de Lightbox Nativo HTML5 -->
+    <Lightbox />
+
+    <!-- 4. CTA Contextual (seção 6.3 item 5) -->
+    <section class="project-contextual-cta mt-2xl hairline-top hairline-bottom" aria-label="Iniciar projeto semelhante">
+      <div class="container cta-container">
+        <div class="grid-12 cta-grid">
+          <div class="col-8 cta-text-col">
+            <span class="type-mono-label text-accent">Novo Projeto</span>
+            <h2 class="cta-heading mt-xs">
+              Quer um projeto com essa linguagem?
+            </h2>
+            <p class="type-body text-ink-2 mt-xs">
+              Conversamos sobre implantação, programa de necessidades e diretrizes para o seu terreno em Joinville e litoral.
+            </p>
+          </div>
+
+          <div class="col-4 cta-actions-col">
+            <a 
+              href={whatsappProjectUrl} 
+              class="btn-cta-whatsapp"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Conversar pelo WhatsApp sobre o projeto ${data.titulo}`}
+            >
+              <span class="type-mono-label">Falar pelo WhatsApp</span>
+              <span class="arrow" aria-hidden="true">↗</span>
+            </a>
+
+            <a 
+              href={briefingProjectUrl} 
+              class="link-cta-briefing mt-xs"
+              aria-label={`Iniciar briefing com referência ao projeto ${data.titulo}`}
+            >
+              <span class="type-mono-label">Iniciar briefing com este projeto</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Navegação para o Próximo Projeto (seção 6.3 item 6) -->
+    <nav class="next-project-nav hairline-bottom" aria-label="Próximo projeto em destaque">
+      <div class="container next-project-container">
+        <div class="next-project-header">
+          <span class="type-mono-label text-ink-2">Próximo projeto</span>
+        </div>
+
+        <a href={getRelativeUrl(`/projetos/${nextSlug}/`)} class="next-project-card mt-sm">
+          <div class="next-project-media">
+            <Picture
+              src={nextData.capa}
+              formats={['avif', 'webp']}
+              widths={[400, 800]}
+              sizes="(max-width: 768px) 100vw, 30vw"
+              alt={`Fotografia de ${nextData.titulo}`}
+              class="next-project-thumb"
+              loading="lazy"
+            />
+          </div>
+
+          <div class="next-project-info">
+            <span class="type-mono-label text-accent">{nextData.categoria} · {nextData.ano}</span>
+            <h3 class="next-project-title mt-xs">{nextData.titulo}</h3>
+            <p class="type-body text-ink-2 mt-xs">{nextData.resumo}</p>
+            <div class="next-action mt-sm">
+              <span class="type-mono-label">Ver projeto</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .project-single-page {
+    width: 100%;
+    padding-bottom: var(--space-xl);
+  }
+
+  /* Hero do Projeto */
+  .project-hero {
+    position: relative;
+    width: 100%;
+    background-color: var(--paper-2);
+  }
+
+  .project-hero-media {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .project-hero-img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (min-width: 768px) {
+    .project-hero-img {
+      aspect-ratio: 21 / 9;
+      max-height: 85vh;
+    }
+  }
+
+  .project-hero-meta {
+    padding: var(--space-sm) 0;
+    background-color: var(--paper);
+  }
+
+  .hero-meta-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .meta-legend {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+
+  /* Seção Editorial */
+  .project-editorial-section {
+    width: 100%;
+  }
+
+  .project-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--ink);
+    letter-spacing: -0.025em;
+  }
+
+  .project-lead {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  .project-markdown-body {
+    line-height: 1.7;
+    font-size: 1.0625rem;
+  }
+
+  .project-markdown-body :global(p) {
+    margin-bottom: 1.25rem;
+  }
+
+  @media (max-width: 899px) {
+    .project-narrative,
+    .project-sidebar {
+      grid-column: span 12 !important;
+    }
+
+    .project-sidebar {
+      margin-top: var(--space-lg);
+    }
+  }
+
+  /* CTA Contextual */
+  .project-contextual-cta {
+    background-color: var(--paper-2);
+    padding: var(--space-xl) 0;
+  }
+
+  .cta-grid {
+    align-items: center;
+    row-gap: var(--space-md);
+  }
+
+  .cta-heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.85rem, 3vw, 2.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  .cta-actions-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  @media (max-width: 767px) {
+    .cta-text-col,
+    .cta-actions-col {
+      grid-column: span 12;
+    }
+  }
+
+  .btn-cta-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: var(--ink);
+    color: var(--paper);
+    padding: 0.85rem 1.5rem;
+    text-decoration: none;
+    border-radius: 2px;
+    border: 1px solid var(--ink);
+    transition: background-color var(--motion-duration-fast) ease;
+  }
+
+  .btn-cta-whatsapp:hover {
+    background-color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .link-cta-briefing {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--ink-2);
+    text-decoration: none;
+    padding: 0.35rem 0;
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .link-cta-briefing:hover {
+    color: var(--ink);
+  }
+
+  /* Próximo Projeto */
+  .next-project-nav {
+    padding: var(--space-xl) 0;
+    background-color: var(--paper);
+  }
+
+  .next-project-card {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: var(--space-lg);
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity var(--motion-duration-fast) ease;
+  }
+
+  @media (max-width: 767px) {
+    .next-project-card {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .next-project-media {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: var(--paper-2);
+    border-radius: 2px;
+  }
+
+  .next-project-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--motion-duration-slow) cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .next-project-card:hover .next-project-thumb {
+    transform: scale(1.02);
+  }
+
+  .next-project-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 400;
+    color: var(--ink);
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .next-project-card:hover .next-project-title {
+    color: var(--accent);
+  }
+
+  .next-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--ink);
+  }
+
+  .next-project-card:hover .next-action {
+    color: var(--accent);
+  }
+
+  .next-project-card:hover .next-action .arrow {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .next-project-thumb,
+    .next-action .arrow {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>
+

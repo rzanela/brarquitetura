@@ -1,0 +1,163 @@
+---
+import { Picture } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projetos'>;
+}
+
+const { project } = Astro.props;
+const { data, id } = project;
+const slug = (data as any).slug || id;
+const projectUrl = `/projetos/${slug}/`;
+---
+
+<section class="hero-section" aria-label={`Projeto em destaque: ${data.titulo}`}>
+  <!-- Heading semântico para acessibilidade e SEO sem poluir visualmente a fotografia -->
+  <h1 class="sr-only">Borges e Robles Arquitetura — Arquitetura e Interiores em Joinville/SC</h1>
+
+  <div class="hero-media-wrapper">
+    <a href={projectUrl} class="hero-link" aria-label={`Ver detalhes do projeto ${data.titulo} em ${data.local}`}>
+      <Picture
+        src={data.capa}
+        formats={['avif', 'webp']}
+        widths={[640, 1024, 1600, 2400]}
+        sizes="100vw"
+        alt={`Fotografia do projeto ${data.titulo} em ${data.local}`}
+        class="hero-image"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </a>
+  </div>
+
+  <!-- Rodapé do Hero com legenda técnica em tipografia mono -->
+  <div class="hero-footer hairline-bottom">
+    <div class="container hero-footer-inner">
+      <div class="hero-caption">
+        <span class="type-mono-label hero-tech-legend">
+          {data.titulo.toUpperCase()} — {data.local.toUpperCase()} — {data.ano}
+        </span>
+        {data.area_m2 && (
+          <span class="type-mono-label text-ink-2 hero-extra-meta">
+            · {data.area_m2} m²
+          </span>
+        )}
+      </div>
+
+      <a href={projectUrl} class="hero-action-link" aria-label={`Ver projeto ${data.titulo}`}>
+        <span class="type-mono-label">Ver projeto</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    position: relative;
+    width: 100%;
+    background-color: var(--paper);
+  }
+
+  /* Fotografia full-bleed com proporções editoriais: 4:5 no mobile, 21:9 no desktop */
+  .hero-media-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--paper-2);
+  }
+
+  .hero-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+  }
+
+  /* Imagem com aspect-ratio rígido e carregamento prioritário */
+  .hero-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform var(--motion-duration-slow) cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  @media (min-width: 768px) {
+    .hero-image {
+      aspect-ratio: 21 / 9;
+      max-height: 86vh;
+    }
+  }
+
+  .hero-link:hover .hero-image {
+    transform: scale(1.015);
+  }
+
+  /* Rodapé do hero com fio de 1px e legenda mono */
+  .hero-footer {
+    width: 100%;
+    background-color: var(--paper);
+    padding: var(--space-sm) 0;
+  }
+
+  .hero-footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+  }
+
+  .hero-caption {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-tech-legend {
+    color: var(--ink);
+    letter-spacing: 0.08em;
+  }
+
+  .hero-extra-meta {
+    letter-spacing: 0.06em;
+  }
+
+  .hero-action-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color var(--motion-duration-fast) ease, transform var(--motion-duration-fast) ease;
+    white-space: nowrap;
+  }
+
+  .hero-action-link .arrow {
+    font-family: var(--font-mono);
+    transition: transform var(--motion-duration-fast) ease;
+  }
+
+  .hero-action-link:hover {
+    color: var(--accent);
+  }
+
+  .hero-action-link:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-image,
+    .hero-action-link,
+    .hero-action-link .arrow {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>
+

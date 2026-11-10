@@ -1,0 +1,126 @@
+/* Reset e Base Editorial */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  background-color: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--paper);
+  color: var(--ink);
+  line-height: var(--line-height-body);
+  font-size: var(--font-size-body);
+  overflow-x: hidden;
+}
+
+/* Acessibilidade — Skip Link */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 1.5rem;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  z-index: 9999;
+  transition: top var(--motion-duration-fast) ease;
+}
+
+.skip-to-content:focus {
+  top: 1.5rem;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Foco acessível uniforme */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* Seleção de texto sóbria */
+::selection {
+  background-color: var(--paper-2);
+  color: var(--ink);
+}
+
+/* Imagens */
+img, picture, svg, video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Links */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--motion-duration-fast) ease, opacity var(--motion-duration-fast) ease;
+}
+
+/* Listas */
+ul, ol {
+  list-style: none;
+}
+
+/* Botões nativos sem estilo de browser */
+button {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* Respeito a preferências de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Conteúdo principal e integração com cabeçalho fixo */
+main {
+  flex: 1;
+  min-height: 80vh;
+  padding-top: var(--header-height);
+}
+
+main.has-transparent-header {
+  padding-top: 0;
+}
+
+/* Utilitário acessível para leitores de tela e SEO */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+

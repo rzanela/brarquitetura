@@ -1,0 +1,164 @@
+---
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  images: ImageMetadata[];
+  projectTitle: string;
+  location?: string;
+  excerpt?: string;
+}
+
+const { images, projectTitle, location = 'Joinville/SC', excerpt } = Astro.props;
+---
+
+<div class="editorial-gallery">
+  <div class="grid-12 gallery-grid">
+    {images.map((image, index) => {
+      // Alternância de ritmos editoriais:
+      // index 0: Par ou individual
+      // Se há várias fotos, alternamos larguras na grade de 12 colunas
+      const isPair = (index % 3 === 1 || index % 3 === 2) && images.length > 2;
+      const colClass = isPair ? 'col-6' : 'col-12';
+      const ratioClass = isPair ? 'ratio-4-5' : 'ratio-3-2';
+      const imageNumber = String(index + 1).padStart(2, '0');
+      const caption = `Fotografia ${imageNumber} — ${projectTitle} (${location})`;
+
+      return (
+        <div class:list={['gallery-item', colClass]}>
+          <figure class="gallery-figure">
+            <button 
+              type="button" 
+              class="gallery-trigger" 
+              data-lightbox-trigger
+              data-lightbox-src={image.src}
+              data-lightbox-alt={caption}
+              data-lightbox-caption={caption}
+              aria-label={`Ampliar ${caption}`}
+            >
+              <div class:list={['gallery-image-wrapper', ratioClass]}>
+                <Picture
+                  src={image}
+                  formats={['avif', 'webp']}
+                  widths={[640, 1024, 1600]}
+                  sizes={isPair ? '(max-width: 768px) 100vw, 50vw' : '100vw'}
+                  alt={caption}
+                  class="gallery-img"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="gallery-zoom-indicator" aria-hidden="true">
+                  <span class="type-mono-label">Ampliar [+]</span>
+                </span>
+              </div>
+            </button>
+            <figcaption class="gallery-caption mt-xs">
+              <span class="type-mono-label text-ink-2">{imageNumber}</span>
+              <span class="type-mono-label text-ink-2">·</span>
+              <span class="type-mono-label text-ink-2">{caption}</span>
+            </figcaption>
+          </figure>
+        </div>
+      );
+    })}
+  </div>
+</div>
+
+<style>
+  .editorial-gallery {
+    width: 100%;
+    margin: var(--space-xl) 0;
+  }
+
+  .gallery-grid {
+    row-gap: var(--space-xl);
+  }
+
+  .gallery-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (max-width: 767px) {
+    .gallery-item {
+      grid-column: span 12 !important;
+    }
+  }
+
+  .gallery-figure {
+    width: 100%;
+    margin: 0;
+  }
+
+  .gallery-trigger {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: zoom-in;
+    text-align: left;
+    position: relative;
+  }
+
+  .gallery-image-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--paper-2);
+    border-radius: 2px;
+  }
+
+  .ratio-3-2 {
+    aspect-ratio: 3 / 2;
+  }
+
+  .ratio-4-5 {
+    aspect-ratio: 4 / 5;
+  }
+
+  .gallery-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform var(--motion-duration-slow) cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .gallery-trigger:hover .gallery-img {
+    transform: scale(1.015);
+  }
+
+  /* Indicador discreto em mono */
+  .gallery-zoom-indicator {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    background-color: rgba(27, 26, 23, 0.85);
+    color: var(--paper);
+    padding: 0.25rem 0.5rem;
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity var(--motion-duration-fast) ease;
+    pointer-events: none;
+  }
+
+  .gallery-trigger:hover .gallery-zoom-indicator {
+    opacity: 1;
+  }
+
+  .gallery-caption {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-img {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>
+

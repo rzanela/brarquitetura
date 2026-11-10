@@ -1,0 +1,160 @@
+---
+import { buildWhatsAppUrl } from '../data/whatsapp';
+import { getRelativeUrl } from '../utils/url';
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  title = "Vamos conversar sobre o seu projeto?",
+  subtitle = "Projetamos para Joinville, o Norte Catarinense e o litoral. Conte sobre o seu terreno, programa e intenções de obra."
+} = Astro.props;
+
+const whatsappUrl = buildWhatsAppUrl({ origem: 'geral' });
+---
+
+<section class="cta-section" aria-label="Chamada para início de projeto">
+  <div class="cta-inner container">
+    <div class="grid-12 cta-grid">
+      <div class="col-8 cta-content">
+        <h2 class="cta-title">
+          {title}
+        </h2>
+        <p class="cta-subtitle type-body text-ink-2 mt-sm">
+          {subtitle}
+        </p>
+      </div>
+
+      <div class="col-4 cta-actions">
+        <a href={getRelativeUrl('/contato/')} class="btn-briefing" aria-label="Iniciar formulário de briefing">
+          <span>Iniciar briefing</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+
+        <a 
+          href={whatsappUrl} 
+          class="link-whatsapp mt-xs" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="Conversar diretamente pelo WhatsApp"
+        >
+          <span class="type-mono-label">ou fale pelo WhatsApp</span>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-section {
+    width: 100%;
+    background-color: var(--paper-2);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: var(--space-xl) 0;
+  }
+
+  .cta-grid {
+    align-items: center;
+    row-gap: var(--space-md);
+  }
+
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .cta-subtitle {
+    max-width: 58ch;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  @media (max-width: 767px) {
+    .cta-content {
+      grid-column: span 12;
+    }
+
+    .cta-actions {
+      grid-column: span 12;
+      margin-top: var(--space-sm);
+    }
+  }
+
+  /* Botão Iniciar briefing sóbrio e sem gradientes (seção 3: cantos máx. 2px, sem sombras) */
+  .btn-briefing {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    background-color: var(--ink);
+    color: var(--paper);
+    padding: 0.85rem 1.65rem;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    border-radius: 2px;
+    border: 1px solid var(--ink);
+    transition: background-color var(--motion-duration-fast) ease, color var(--motion-duration-fast) ease, transform var(--motion-duration-fast) ease;
+  }
+
+  .btn-briefing:hover {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: var(--paper);
+  }
+
+  .btn-briefing .arrow {
+    transition: transform var(--motion-duration-fast) ease;
+  }
+
+  .btn-briefing:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  /* Link discreto para o WhatsApp */
+  .link-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--ink-2);
+    text-decoration: none;
+    padding: 0.35rem 0;
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .link-whatsapp:hover {
+    color: var(--ink);
+  }
+
+  .link-whatsapp .arrow {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-briefing,
+    .btn-briefing .arrow,
+    .link-whatsapp {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>
+

@@ -1,0 +1,167 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import Hero from '../components/Hero.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import AwardsList from '../components/AwardsList.astro';
+import ProcessSteps from '../components/ProcessSteps.astro';
+import CtaBlock from '../components/CtaBlock.astro';
+import { getRelativeUrl } from '../utils/url';
+
+// Obtenção da coleção de projetos tipada via Zod
+const allProjects = await getCollection('projetos');
+const sortedProjects = allProjects.sort((a, b) => a.data.ordem - b.data.ordem);
+
+// Seleção do projeto para o Hero (Casa RB, projeto premiado e de maior destaque)
+const heroProject = sortedProjects.find(p => p.id === 'casa-rb' || (p.data as any).slug === 'casa-rb') || sortedProjects[0];
+
+// Projetos selecionados para a grade da Home (destaque = true, limitado a 6)
+const featuredProjects = sortedProjects.filter(p => p.data.destaque).slice(0, 6);
+---
+
+<Base transparentHeader={true} showDebugGrid={false}>
+  <!-- 6.1 Item 2: Hero com fotografia full-bleed e legenda técnica mono (LCP Prioritário) -->
+  <Hero project={heroProject} />
+
+  <!-- 6.1 Item 3: Manifesto (01 — Escritório) alinhado em colunas com offset -->
+  <section class="section-manifesto hairline-bottom" aria-labelledby="manifesto-label">
+    <div class="container">
+      <SectionLabel number="01" title="Escritório" id="manifesto-label" />
+
+      <div class="grid-12 mt-md">
+        <div class="col-8 offset-2 manifesto-content">
+          <p class="type-manifesto manifesto-text">
+            Projetamos casas e espaços de trabalho a partir do terreno, da luz e de quem vai viver neles. Desde [VALIDAR: ano de fundação, ex. 2018], em Joinville.
+          </p>
+
+          <p class="type-body text-ink-2 mt-md manifesto-subtext">
+            Acreditamos que a arquitetura deve responder com rigor ao clima subtropical do Sul, valorizando materiais autênticos como o concreto moldado in loco, a madeira nativa certificada e a ventilação natural contínua.
+          </p>
+
+          <div class="mt-md">
+            <a href={getRelativeUrl('/escritorio/')} class="manifesto-link" aria-label="Conheça a história e os sócios do escritório">
+              <span class="type-mono-label">Conheça o escritório</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6.1 Item 4: Projetos Selecionados (02 — Projetos) em Grid Assimétrico Real -->
+  <section class="section-projects hairline-bottom" aria-labelledby="projects-label">
+    <div class="container">
+      <div class="projects-section-header">
+        <SectionLabel number="02" title="Projetos selecionados" id="projects-label" />
+      </div>
+
+      <div class="mt-lg">
+        <ProjectGrid 
+          projects={featuredProjects} 
+          totalProjectsCount={allProjects.length} 
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- 6.1 Item 5: Reconhecimento (03 — Prêmios e publicações) em lista tipográfica sóbria -->
+  <section class="section-awards hairline-bottom" aria-labelledby="awards-label">
+    <div class="container">
+      <SectionLabel number="03" title="Prêmios e publicações" id="awards-label" />
+
+      <div class="mt-lg">
+        <AwardsList />
+      </div>
+    </div>
+  </section>
+
+  <!-- 6.1 Item 6: Processo (04 — Como trabalhamos) com 4 etapas numeradas sem ícones -->
+  <section class="section-process hairline-bottom" aria-labelledby="process-label">
+    <div class="container">
+      <SectionLabel number="04" title="Como trabalhamos" id="process-label" />
+
+      <div class="mt-lg">
+        <ProcessSteps />
+      </div>
+    </div>
+  </section>
+
+  <!-- 6.1 Item 8: CTA Final Bloco --paper-2 com Iniciar Briefing e WhatsApp -->
+  <CtaBlock 
+    title="Vamos conversar sobre o seu projeto?"
+    subtitle="Projetamos para Joinville, o Norte Catarinense e o litoral. Conte sobre o seu terreno, prazo e intenções construtivas."
+  />
+</Base>
+
+<style>
+  /* Seções com espaçamento editorial generoso */
+  .section-manifesto,
+  .section-projects,
+  .section-awards,
+  .section-process {
+    padding: var(--space-xl) 0;
+    width: 100%;
+    background-color: var(--paper);
+  }
+
+  /* Manifesto Editorial */
+  .manifesto-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (max-width: 900px) {
+    .manifesto-content {
+      grid-column: span 12 !important;
+      margin-left: 0 !important;
+    }
+  }
+
+  .manifesto-text {
+    color: var(--ink);
+  }
+
+  .manifesto-subtext {
+    max-width: 60ch;
+    font-size: 1.125rem;
+    line-height: 1.65;
+  }
+
+  .manifesto-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color var(--motion-duration-fast) ease;
+  }
+
+  .manifesto-link .arrow {
+    font-family: var(--font-mono);
+    transition: transform var(--motion-duration-fast) ease;
+  }
+
+  .manifesto-link:hover {
+    color: var(--accent);
+  }
+
+  .manifesto-link:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .projects-section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .manifesto-link,
+    .manifesto-link .arrow {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>

@@ -1,0 +1,587 @@
+---
+import { getRelativeUrl } from '../utils/url';
+
+interface Props {
+  initialProject?: string;
+}
+
+const { initialProject } = Astro.props;
+---
+
+<div class="briefing-form-container">
+  <!-- Barra de Progresso Textual e Visual -->
+  <div class="briefing-progress-header">
+    <div class="progress-meta">
+      <span class="type-mono-label text-accent" data-progress-text>Etapa 1 de 4</span>
+      <span class="type-mono-label text-ink-2 project-referenced" data-project-notice style={initialProject ? '' : 'display: none;'}>
+        {initialProject && `Referência: Projeto ${initialProject}`}
+      </span>
+    </div>
+    <div class="progress-track mt-xs" aria-hidden="true">
+      <div class="progress-fill" data-progress-bar style="width: 25%;"></div>
+    </div>
+  </div>
+
+  <form
+    id="briefing-form"
+    action="https://api.web3forms.com/submit"
+    method="POST"
+    class="briefing-form mt-md"
+    novalidate
+  >
+    <!-- Web3Forms Configuração Pública e Antispam -->
+    <input type="hidden" name="access_key" value="[SUBSTITUIR: Chave pública Web3Forms, ex: 12345678-xxxx-xxxx-xxxx-xxxxxxxxxxxx]" />
+    <input type="hidden" name="subject" value="Novo Briefing pelo Site — Borges e Robles Arquitetura" />
+    <input type="hidden" name="from_name" value="BrArq Website Briefing" />
+    <input type="checkbox" name="botcheck" class="sr-only" tabindex="-1" autocomplete="off" />
+
+    <!-- Campos Ocultos de Contexto e UTMs (seção 7.2) -->
+    <input type="hidden" name="projeto_origem" value={initialProject || ""} />
+    <input type="hidden" name="utm_source" value="" />
+    <input type="hidden" name="utm_medium" value="" />
+    <input type="hidden" name="utm_campaign" value="" />
+    <input type="hidden" name="pagina_entrada" value="" />
+
+    <!-- ETAPA 1: Tipo de Projeto -->
+    <fieldset class="step-fieldset is-active" data-step="1">
+      <legend class="step-legend">
+        <span class="type-mono-label text-accent step-badge">01</span>
+        <h2 class="step-title">Qual é o tipo de projeto que você planeja?</h2>
+      </legend>
+      <p class="type-body text-ink-2 mt-xs">
+        Selecione a categoria principal da sua intenção arquitetônica.
+      </p>
+
+      <div class="radio-cards-grid mt-md" role="radiogroup" aria-required="true">
+        <label class="radio-card">
+          <input type="radio" name="tipo_projeto" value="Residencial" required checked />
+          <span class="radio-card-content">
+            <span class="type-mono-label">Residencial</span>
+            <span class="type-body text-ink-2 card-desc">Casa unifamiliar ou condomínio</span>
+          </span>
+        </label>
+
+        <label class="radio-card">
+          <input type="radio" name="tipo_projeto" value="Comercial" required />
+          <span class="radio-card-content">
+            <span class="type-mono-label">Comercial</span>
+            <span class="type-body text-ink-2 card-desc">Edifício, loja, clínica ou sede corporativa</span>
+          </span>
+        </label>
+
+        <label class="radio-card">
+          <input type="radio" name="tipo_projeto" value="Interiores" required />
+          <span class="radio-card-content">
+            <span class="type-mono-label">Interiores</span>
+            <span class="type-body text-ink-2 card-desc">Projeto de interiores para imóvel existente</span>
+          </span>
+        </label>
+
+        <label class="radio-card">
+          <input type="radio" name="tipo_projeto" value="Reforma" required />
+          <span class="radio-card-content">
+            <span class="type-mono-label">Reforma e retrofit</span>
+            <span class="type-body text-ink-2 card-desc">Ampliação ou reestruturação completa</span>
+          </span>
+        </label>
+
+        <label class="radio-card">
+          <input type="radio" name="tipo_projeto" value="Outro" required />
+          <span class="radio-card-content">
+            <span class="type-mono-label">Outro escopo</span>
+            <span class="type-body text-ink-2 card-desc">Instalação específica ou estudo de viabilidade</span>
+          </span>
+        </label>
+      </div>
+    </fieldset>
+
+    <!-- ETAPA 2: Escopo e Terreno -->
+    <fieldset class="step-fieldset" data-step="2" aria-hidden="true">
+      <legend class="step-legend">
+        <span class="type-mono-label text-accent step-badge">02</span>
+        <h2 class="step-title">Características do imóvel e do sítio</h2>
+      </legend>
+      <p class="type-body text-ink-2 mt-xs">
+        Informações básicas para compreendermos as condicionantes do terreno.
+      </p>
+
+      <div class="fields-stack mt-md">
+        <div class="form-group">
+          <label for="cidade_imovel" class="form-label type-mono-label">
+            Cidade do imóvel / terreno <span class="req">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="cidade_imovel" 
+            name="cidade_imovel" 
+            class="form-input" 
+            placeholder="Ex: Joinville, Itapoá, São Francisco do Sul..." 
+            required 
+          />
+        </div>
+
+        <div class="form-group">
+          <span class="form-label type-mono-label">Você já possui terreno próprio? <span class="req">*</span></span>
+          <div class="options-inline mt-xs">
+            <label class="pill-radio">
+              <input type="radio" name="terreno_proprio" value="Sim" checked required />
+              <span>Sim, já adquirido</span>
+            </label>
+            <label class="pill-radio">
+              <input type="radio" name="terreno_proprio" value="Em negociação" required />
+              <span>Em negociação / Procura</span>
+            </label>
+            <label class="pill-radio">
+              <input type="radio" name="terreno_proprio" value="Não" required />
+              <span>Não (imóvel para reforma)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="area_estimada" class="form-label type-mono-label">
+            Área estimada de construção <span class="req">*</span>
+          </label>
+          <select id="area_estimada" name="area_estimada" class="form-select" required>
+            <option value="Até 150 m²">Até 150 m²</option>
+            <option value="150 a 300 m²" selected>150 a 300 m²</option>
+            <option value="300 a 500 m²">300 a 500 m²</option>
+            <option value="Acima de 500 m²">Acima de 500 m²</option>
+            <option value="Ainda não sei definir">Ainda não sei definir</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ETAPA 3: Prazo e Investimento -->
+    <fieldset class="step-fieldset" data-step="3" aria-hidden="true">
+      <legend class="step-legend">
+        <span class="type-mono-label text-accent step-badge">03</span>
+        <h2 class="step-title">Cronograma e previsão de investimento</h2>
+      </legend>
+      <p class="type-body text-ink-2 mt-xs">
+        Esses parâmetros alinham a intensidade de trabalho e a escala material do projeto.
+      </p>
+
+      <div class="fields-stack mt-md">
+        <div class="form-group">
+          <label for="prazo_inicio" class="form-label type-mono-label">
+            Quando você pretende iniciar o projeto ou obra? <span class="req">*</span>
+          </label>
+          <select id="prazo_inicio" name="prazo_inicio" class="form-select" required>
+            <option value="Imediatamente (até 1 mês)">Imediatamente (até 1 mês)</option>
+            <option value="Em até 3 meses" selected>Em até 3 meses</option>
+            <option value="De 3 a 6 meses">De 3 a 6 meses</option>
+            <option value="De 6 a 12 meses">De 6 a 12 meses</option>
+            <option value="Sem pressa (planejamento futuro)">Sem pressa (planejamento futuro)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="faixa_investimento" class="form-label type-mono-label">
+            Faixa estimada de investimento na obra [VALIDAR faixas com o Diretor] <span class="req">*</span>
+          </label>
+          <select id="faixa_investimento" name="faixa_investimento" class="form-select" required>
+            <option value="Até R$ 500 mil">Até R$ 500 mil</option>
+            <option value="R$ 500 mil a R$ 1 milhão">R$ 500 mil a R$ 1 milhão</option>
+            <option value="R$ 1 milhão a R$ 2 milhões" selected>R$ 1 milhão a R$ 2 milhões</option>
+            <option value="R$ 2 milhões a R$ 4 milhões">R$ 2 milhões a R$ 4 milhões</option>
+            <option value="Acima de R$ 4 milhões">Acima de R$ 4 milhões</option>
+            <option value="Prefiro definir após estudo preliminar">Prefiro definir após estudo preliminar</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ETAPA 4: Contato e Dados Pessoais -->
+    <fieldset class="step-fieldset" data-step="4" aria-hidden="true">
+      <legend class="step-legend">
+        <span class="type-mono-label text-accent step-badge">04</span>
+        <h2 class="step-title">Seus dados para contato direto</h2>
+      </legend>
+      <p class="type-body text-ink-2 mt-xs">
+        Entraremos em contato em até 1 dia útil para agendar a primeira conversa.
+      </p>
+
+      <div class="fields-stack mt-md">
+        <div class="form-group">
+          <label for="nome" class="form-label type-mono-label">Seu nome completo <span class="req">*</span></label>
+          <input type="text" id="nome" name="nome" class="form-input" placeholder="Como podemos te chamar?" required />
+        </div>
+
+        <div class="grid-12 form-row">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="email" class="form-label type-mono-label">E-mail <span class="req">*</span></label>
+              <input type="email" id="email" name="email" class="form-input" placeholder="seu@email.com" required />
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="whatsapp" class="form-label type-mono-label">WhatsApp com DDD <span class="req">*</span></label>
+              <input type="tel" id="whatsapp" name="whatsapp" class="form-input" placeholder="(47) 90000-0000" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="como_conheceu" class="form-label type-mono-label">Como conheceu a Borges e Robles?</label>
+          <select id="como_conheceu" name="como_conheceu" class="form-select">
+            <option value="Instagram @brarquitetura">Instagram @brarquitetura</option>
+            <option value="Indicação de cliente ou parceiro">Indicação de cliente ou parceiro</option>
+            <option value="Pesquisa no Google">Pesquisa no Google</option>
+            <option value="Publicação em portal de arquitetura">Publicação em portal de arquitetura</option>
+            <option value="Outro canal">Outro canal</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="mensagem" class="form-label type-mono-label">Conte mais detalhes sobre a sua ideia (opcional)</label>
+          <textarea 
+            id="mensagem" 
+            name="mensagem" 
+            class="form-textarea" 
+            rows="3" 
+            placeholder="Conte sobre seu terreno, inspirações, quantidade de dormitórios ou necessidades específicas..."
+          ></textarea>
+        </div>
+
+        <!-- Termo de Consentimento LGPD Obrigatório -->
+        <div class="form-group checkbox-group mt-xs">
+          <label class="checkbox-label">
+            <input type="checkbox" name="aceite_lgpd" value="sim" required />
+            <span class="type-body text-ink-2">
+              Concordo com o tratamento dos meus dados exclusivamente para o atendimento deste projeto, conforme a <a href={getRelativeUrl('/privacidade/')} class="legal-link" target="_blank">Política de Privacidade (LGPD)</a>. <span class="req">*</span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Barra de Navegação e Envio -->
+    <div class="form-nav-actions hairline-top mt-lg">
+      <button 
+        type="button" 
+        class="btn-nav btn-prev" 
+        data-step-prev 
+        style="display: none;"
+      >
+        <span class="arrow" aria-hidden="true">←</span>
+        <span>Voltar</span>
+      </button>
+
+      <div class="nav-spacer"></div>
+
+      <button 
+        type="button" 
+        class="btn-nav btn-next" 
+        data-step-next
+      >
+        <span>Avançar</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </button>
+
+      <button 
+        type="submit" 
+        class="btn-nav btn-submit" 
+        data-step-submit 
+        style="display: none;"
+      >
+        <span>Enviar briefing</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  import { initBriefing } from '../scripts/briefing';
+
+  document.addEventListener('astro:page-load', () => {
+    initBriefing();
+  });
+</script>
+
+<style>
+  .briefing-form-container {
+    width: 100%;
+    background-color: var(--paper);
+  }
+
+  /* Barra de progresso */
+  .briefing-progress-header {
+    width: 100%;
+  }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 2px;
+    background-color: var(--line);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background-color: var(--accent);
+    transition: width var(--motion-duration-normal) cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /* Fieldsets e degradação progressiva */
+  .step-fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Com JS ativo, apenas a etapa com .is-active é exibida. Sem JS, todas aparecem em fluxo contínuo. */
+  :global(.briefing-form.js-multi-step) .step-fieldset {
+    display: none;
+  }
+
+  :global(.briefing-form.js-multi-step) .step-fieldset.is-active {
+    display: block;
+    animation: fadeInStep 250ms ease-out;
+  }
+
+  @keyframes fadeInStep {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .step-legend {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0;
+    margin-bottom: 0.25rem;
+  }
+
+  .step-badge {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .step-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+    font-weight: 400;
+    line-height: 1.25;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+  }
+
+  /* Radio Cards (Etapa 1) */
+  .radio-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+  }
+
+  .radio-card {
+    display: flex;
+    align-items: flex-start;
+    padding: var(--space-sm);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    background-color: var(--paper-2);
+    cursor: pointer;
+    transition: border-color var(--motion-duration-fast) ease, background-color var(--motion-duration-fast) ease;
+  }
+
+  .radio-card:hover {
+    border-color: var(--ink-2);
+  }
+
+  .radio-card input[type="radio"] {
+    margin-top: 0.25rem;
+    margin-right: 0.75rem;
+    accent-color: var(--accent);
+  }
+
+  .radio-card:has(input[type="radio"]:checked) {
+    border-color: var(--ink);
+    background-color: var(--paper);
+  }
+
+  .radio-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .card-desc {
+    font-size: 0.875rem;
+  }
+
+  /* Formulários e campos */
+  .fields-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .form-label {
+    color: var(--ink);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .req {
+    color: var(--accent);
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    width: 100%;
+    padding: 0.75rem 0.85rem;
+    background-color: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: var(--ink);
+    transition: border-color var(--motion-duration-fast) ease, background-color var(--motion-duration-fast) ease;
+  }
+
+  .form-input:focus,
+  .form-select:focus,
+  .form-textarea:focus {
+    border-color: var(--ink);
+    background-color: var(--paper);
+    outline: none;
+  }
+
+  .options-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  .pill-radio {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    background-color: var(--paper-2);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: border-color var(--motion-duration-fast) ease;
+  }
+
+  .pill-radio:has(input:checked) {
+    border-color: var(--ink);
+    background-color: var(--ink);
+    color: var(--paper);
+  }
+
+  .pill-radio input {
+    accent-color: var(--accent);
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    cursor: pointer;
+  }
+
+  .checkbox-label input {
+    margin-top: 0.25rem;
+    accent-color: var(--accent);
+  }
+
+  .legal-link {
+    text-decoration: underline;
+    color: var(--ink);
+  }
+
+  /* Botões de Ação */
+  .form-nav-actions {
+    display: flex;
+    align-items: center;
+    padding-top: var(--space-md);
+  }
+
+  .nav-spacer {
+    flex: 1;
+  }
+
+  .btn-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.4rem;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background-color var(--motion-duration-fast) ease, color var(--motion-duration-fast) ease;
+  }
+
+  .btn-prev {
+    background: transparent;
+    color: var(--ink-2);
+    border: 1px solid var(--line);
+  }
+
+  .btn-prev:hover {
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .btn-next,
+  .btn-submit {
+    background-color: var(--ink);
+    color: var(--paper);
+    border: 1px solid var(--ink);
+  }
+
+  .btn-next:hover,
+  .btn-submit:hover {
+    background-color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 599px) {
+    .form-row .col-6 {
+      grid-column: span 12 !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.briefing-form.js-multi-step) .step-fieldset.is-active {
+      animation: none !important;
+    }
+    .progress-fill {
+      transition: none !important;
+    }
+  }
+</style>
+
