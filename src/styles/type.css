@@ -1,9 +1,29 @@
-/* Importação de Fontes Auto-Hospedadas (@fontsource) */
-@import '@fontsource/newsreader/400.css';
-@import '@fontsource/newsreader/400-italic.css';
-@import '@fontsource/schibsted-grotesk/400.css';
-@import '@fontsource/schibsted-grotesk/500.css';
-@import '@fontsource/ibm-plex-mono/400.css';
+/* Tipografia — Saira (OFL, ver fonts/Saira-OFL.txt), escolhida por ecoar a logo:
+   formas quadradas de cantos arredondados, desenho estendido estilo Eurostile.
+   Um único arquivo variável (eixos wght 100–900 e wdth 50–125%) serve duas famílias:
+   - "Saira BR": texto corrido, largura normal;
+   - "Saira BR Expanded": títulos e rótulos. O descritor font-stretch fixo em 125%
+     limita o eixo wdth, então qualquer elemento com essa família sai estendido
+     como "BORGES ROBLES" / "arquitetura", sem precisar de font-stretch por componente. */
+@font-face {
+  font-family: "Saira BR";
+  src: url("./fonts/saira-latin-wdth-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-stretch: 100%;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Saira BR Expanded";
+  src: url("./fonts/saira-latin-wdth-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-stretch: 125%;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 /* Famílias Utilitárias */
 .font-display {
@@ -21,25 +41,25 @@
 /* Escala e Estilos Editoriais */
 h1, .type-display {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: var(--font-weight-display);
   font-size: var(--font-size-display);
   line-height: var(--line-height-tight);
-  letter-spacing: -0.025em; /* Tracking levemente negativo */
+  letter-spacing: -0.01em; /* Tracking levemente negativo */
   color: var(--ink);
 }
 
 h2, .type-h2 {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: var(--font-weight-display);
   font-size: var(--font-size-h2);
   line-height: var(--line-height-heading);
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
   color: var(--ink);
 }
 
 h3, .type-h3 {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: var(--font-weight-display);
   font-size: var(--font-size-h3);
   line-height: 1.3;
   color: var(--ink);
@@ -60,17 +80,17 @@ p, .type-body {
   line-height: 1.4;
   font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--tracking-label);
   color: var(--ink-2);
 }
 
 /* Manifesto editorial (Home) */
 .type-manifesto {
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3.8vw, 3.25rem);
-  line-height: 1.25;
-  font-weight: 400;
-  letter-spacing: -0.015em;
+  font-size: clamp(1.5rem, 2.9vw, 2.6rem);
+  line-height: 1.3;
+  font-weight: var(--font-weight-display);
+  letter-spacing: -0.01em;
   color: var(--ink);
 }
 

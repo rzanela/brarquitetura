@@ -376,10 +376,10 @@ const { initialProject } = Astro.props;
   .step-title {
     font-family: var(--font-display);
     font-size: clamp(1.4rem, 2.5vw, 1.85rem);
-    font-weight: 400;
+    font-weight: var(--font-weight-display);
     line-height: 1.25;
     color: var(--ink);
-    letter-spacing: -0.015em;
+    letter-spacing: -0.01em;
   }
 
   /* Radio Cards (Etapa 1) */
@@ -489,7 +489,7 @@ const { initialProject } = Astro.props;
     font-family: var(--font-mono);
     font-size: var(--font-size-mono);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: var(--tracking-label);
     transition: border-color var(--motion-duration-fast) ease;
   }
 
@@ -539,7 +539,7 @@ const { initialProject } = Astro.props;
     font-family: var(--font-mono);
     font-size: var(--font-size-mono);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--tracking-label);
     border-radius: 2px;
     cursor: pointer;
     transition: background-color var(--motion-duration-fast) ease, color var(--motion-duration-fast) ease;

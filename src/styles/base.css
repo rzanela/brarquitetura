@@ -38,7 +38,7 @@ body {
   font-family: var(--font-mono);
   font-size: var(--font-size-mono);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--tracking-label);
   text-decoration: none;
   z-index: 9999;
   transition: top var(--motion-duration-fast) ease;
@@ -145,3 +145,25 @@ main.has-transparent-header {
   border-width: 0;
 }
 
+
+/* Entrada suave ao rolar (classes aplicadas por scripts/reveal.ts) */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 900ms var(--motion-ease) var(--reveal-delay, 0ms),
+    transform 900ms var(--motion-ease) var(--reveal-delay, 0ms);
+}
+
+.reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

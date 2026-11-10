@@ -87,9 +87,9 @@ const suggestedProjects = allProjects.slice(0, 3);
   .error-title {
     font-family: var(--font-display);
     font-size: clamp(2.5rem, 5vw, 4.5rem);
-    font-weight: 400;
+    font-weight: var(--font-weight-display);
     line-height: 1.1;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     color: var(--ink);
   }
 
@@ -115,7 +115,7 @@ const suggestedProjects = allProjects.slice(0, 3);
     font-family: var(--font-mono);
     font-size: var(--font-size-mono);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--tracking-label);
     border-radius: var(--radius-max);
     transition: background-color var(--motion-duration-fast) ease;
   }
@@ -140,7 +140,7 @@ const suggestedProjects = allProjects.slice(0, 3);
     font-family: var(--font-mono);
     font-size: var(--font-size-mono);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--tracking-label);
     border-bottom: 1px solid var(--line);
     transition: border-color var(--motion-duration-fast) ease, color var(--motion-duration-fast) ease;
   }
