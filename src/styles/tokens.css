@@ -1,11 +1,12 @@
 :root {
-  /* Cores — derivadas da logo (preto + azul das barras sobre branco) */
+  /* Cores — derivadas da logo oficial (cinza #373435 + azul #2680C2 sobre branco) */
   --paper: #F5F6F7;   /* fundo branco-gelo neutro */
   --paper-2: #E8EBEE; /* blocos alternados, cinza-azulado claro */
-  --ink: #141619;     /* texto principal, preto da logo (16.8:1 sobre --paper) */
+  --ink: #373435;     /* texto principal, cinza exato da logo (11.4:1 sobre --paper, 10.3:1 sobre --paper-2) */
   --ink-2: #555B63;   /* texto secundário / legendas (6.3:1 sobre --paper, 5.7:1 sobre --paper-2) */
   --line: #D2D7DD;    /* fios estruturais de 1px */
-  --accent: #2868A0;  /* azul das barras da logo — links ativos, foco, CTA (5.4:1 / 4.9:1) */
+  --brand-blue: #2680C2; /* azul exato das barras da logo — só elementos gráficos (3.9:1, abaixo de AA p/ texto) */
+  --accent: #2868A0;  /* azul da marca escurecido p/ texto: links ativos, foco, CTA (5.4:1 / 4.9:1) */
   --focus: #2868A0;
 
   /* Famílias tipográficas (self-hosted via @fontsource) */

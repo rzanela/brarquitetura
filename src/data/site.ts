@@ -53,16 +53,16 @@ export const siteData: SiteConfig = {
   url: "https://brarquitetura.com.br",
   address: {
     street: "Rua Lages, 743",
-    neighborhood: "[SUBSTITUIR: bairro da Rua Lages, 743]",
+    neighborhood: "América",
     city: "Joinville",
     state: "SC",
-    postalCode: "[SUBSTITUIR: CEP]",
+    postalCode: "89204-010",
     country: "BR",
-    fullFormatted: "Rua Lages, 743 — [SUBSTITUIR: bairro e CEP] — Joinville/SC"
+    fullFormatted: "Rua Lages, 743 — América — 89204-010 — Joinville/SC"
   },
   contact: {
-    phone: "[SUBSTITUIR: +554730000000]",
-    phoneFormatted: "[SUBSTITUIR: (47) 3000-0000]",
+    phone: "+554730276667",
+    phoneFormatted: "(47) 3027-6667",
     whatsapp: "[SUBSTITUIR: 5547900000000]",
     whatsappFormatted: "[SUBSTITUIR: (47) 90000-0000]",
     email: "[SUBSTITUIR: contato@brarquitetura.com.br]"

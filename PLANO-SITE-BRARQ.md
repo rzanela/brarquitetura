@@ -114,7 +114,7 @@ Concorrentes de Joinville presentes na web usam majoritariamente templates gené
 :root {
   --paper:   #F5F6F7; /* fundo branco-gelo neutro (revisado pela logo) */
   --paper-2: #E8EBEE; /* blocos alternados */
-  --ink:     #141619; /* texto principal */
+  --ink:     #373435; /* texto principal */
   --ink-2:   #555B63; /* texto secundário / legendas */
   --line:    #D2D7DD; /* fios de 1px */
   --accent:  #2868A0; /* azul das barras da logo — uso raro: links ativos, foco, 1 CTA */

@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { siteData } from '../data/site';
 import { getRelativeUrl } from '../utils/url';
 import logo from '../assets/marca/logo-borges-robles.png';
+import logoBranca from '../assets/marca/logo-borges-robles-branca.png';
 
 interface Props {
   currentPath?: string;
@@ -25,12 +26,24 @@ const navItems = [
       <Image
         src={logo}
         alt="Borges e Robles Arquitetura"
-        widths={[240, 480, 767]}
-        sizes="(max-width: 767px) 172px, 215px"
-        class="wordmark-logo"
+        widths={[240, 480, 960]}
+        sizes="(max-width: 767px) 176px, 220px"
+        class="wordmark-logo wordmark-logo--escura"
         loading="eager"
         decoding="async"
       />
+      {transparentOverHero && (
+        <Image
+          src={logoBranca}
+          alt=""
+          aria-hidden="true"
+          widths={[240, 480, 960]}
+          sizes="(max-width: 767px) 176px, 220px"
+          class="wordmark-logo wordmark-logo--branca"
+          loading="eager"
+          decoding="async"
+        />
+      )}
     </a>
 
     <!-- Navegação Desktop -->
@@ -162,9 +175,13 @@ const navItems = [
     color: #F5F6F7;
   }
 
-  /* Logo em versão clara (monocromática) sobre a fotografia */
-  .site-header.header-transparent:not(.is-scrolled):not(:has(.mobile-overlay.is-open)) .wordmark-logo {
-    filter: brightness(0) invert(1);
+  /* Sobre a fotografia: troca para a versão branca oficial da logo (barras azuis mantidas) */
+  .site-header.header-transparent:not(.is-scrolled):not(:has(.mobile-overlay.is-open)) .wordmark-logo--escura {
+    display: none;
+  }
+
+  .site-header.header-transparent:not(.is-scrolled):not(:has(.mobile-overlay.is-open)) .wordmark-logo--branca {
+    display: block;
   }
 
   .site-header.header-transparent:not(.is-scrolled):not(:has(.mobile-overlay.is-open)) .mobile-menu-trigger {
@@ -193,7 +210,10 @@ const navItems = [
     display: block;
     height: 30px;
     width: auto;
-    transition: filter var(--motion-duration-fast) ease;
+  }
+
+  .wordmark-logo--branca {
+    display: none;
   }
 
   @media (max-width: 767px) {
@@ -244,7 +264,7 @@ const navItems = [
     left: 0;
     width: 100%;
     height: 1px;
-    background-color: var(--accent);
+    background-color: var(--brand-blue);
   }
 
   .nav-whatsapp {

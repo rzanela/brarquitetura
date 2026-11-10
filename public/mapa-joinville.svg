@@ -49,12 +49,12 @@
     <circle r="2" fill="#F5F6F7"/>
     
     <!-- Caixa de chamada técnica -->
-    <rect x="14" y="-34" width="220" height="42" fill="#141619" rx="2"/>
+    <rect x="14" y="-34" width="220" height="42" fill="#373435" rx="2"/>
     <text x="24" y="-20" font-family="sans-serif" font-weight="600" font-size="12" fill="#F5F6F7" letter-spacing="0.5">BORGES E ROBLES ARQUITETURA</text>
     <text x="24" y="-6" font-family="monospace" font-size="10" fill="#D2D7DD" letter-spacing="1">RUA LAGES, 743 · JOINVILLE/SC</text>
   </g>
 
   <!-- Coordenadas Geográficas no rodapé do mapa -->
-  <text x="24" y="456" font-family="monospace" font-size="11" fill="#141619" letter-spacing="1.5">26°18'16.2" S  48°50'55.3" W · CLIQUE PARA ABRIR NO GOOGLE MAPS ↗</text>
+  <text x="24" y="456" font-family="monospace" font-size="11" fill="#373435" letter-spacing="1.5">26°18'16.2" S  48°50'55.3" W · CLIQUE PARA ABRIR NO GOOGLE MAPS ↗</text>
 </svg>
 
