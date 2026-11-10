@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import { siteData } from '../data/site';
 import { getRelativeUrl } from '../utils/url';
+import logo from '../assets/marca/logo-borges-robles.png';
 
 interface Props {
   currentPath?: string;
@@ -18,11 +20,17 @@ const navItems = [
 
 <header class:list={['site-header', { 'header-transparent': transparentOverHero }]} id="site-header">
   <div class="container header-inner">
-    <!-- Wordmark Oficial Provisório -->
+    <!-- Logo oficial -->
     <a href={getRelativeUrl('/')} class="wordmark" aria-label="Borges e Robles Arquitetura — Página Inicial">
-      <span class="wordmark-monogram">BR</span>
-      <span class="wordmark-divider" aria-hidden="true">/</span>
-      <span class="wordmark-name">Borges e Robles Arquitetura</span>
+      <Image
+        src={logo}
+        alt="Borges e Robles Arquitetura"
+        widths={[240, 480, 767]}
+        sizes="(max-width: 767px) 172px, 215px"
+        class="wordmark-logo"
+        loading="eager"
+        decoding="async"
+      />
     </a>
 
     <!-- Navegação Desktop -->
@@ -143,6 +151,30 @@ const navItems = [
     border-bottom: 1px solid transparent;
   }
 
+  /* Sobre a fotografia do hero: texto claro + véu escuro no topo para legibilidade.
+     Desliga quando o menu mobile (fundo --paper) está aberto. */
+  .site-header.header-transparent:not(.is-scrolled):not(:has(.mobile-overlay.is-open)) {
+    background-image: linear-gradient(to bottom, rgba(14, 18, 24, 0.55), rgba(14, 18, 24, 0));
+  }
+
+  .site-header.header-transparent:not(.is-scrolled):not(:has(.mobile-overlay.is-open))
+    :is(.nav-link, .mobile-menu-trigger) {
+    color: #F5F6F7;
+  }
+
+  /* Logo em versão clara (monocromática) sobre a fotografia */
+  .site-header.header-transparent:not(.is-scrolled):not(:has(.mobile-overlay.is-open)) .wordmark-logo {
+    filter: brightness(0) invert(1);
+  }
+
+  .site-header.header-transparent:not(.is-scrolled):not(:has(.mobile-overlay.is-open)) .mobile-menu-trigger {
+    border-bottom-color: #F5F6F7;
+  }
+
+  .site-header.header-transparent:not(.is-scrolled):not(:has(.mobile-overlay.is-open)) .nav-whatsapp {
+    color: #A9CBEA;
+  }
+
   .header-inner {
     height: 100%;
     display: flex;
@@ -150,35 +182,24 @@ const navItems = [
     justify-content: space-between;
   }
 
-  /* Wordmark */
+  /* Logo */
   .wordmark {
     display: inline-flex;
-    align-items: baseline;
-    gap: 0.65rem;
+    align-items: center;
     text-decoration: none;
-    color: var(--ink);
   }
 
-  .wordmark-monogram {
-    font-family: var(--font-display);
-    font-size: 1.75rem;
-    line-height: 1;
-    font-weight: 400;
-    letter-spacing: -0.03em;
+  .wordmark-logo {
+    display: block;
+    height: 30px;
+    width: auto;
+    transition: filter var(--motion-duration-fast) ease;
   }
 
-  .wordmark-divider {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--line);
-  }
-
-  .wordmark-name {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ink-2);
+  @media (max-width: 767px) {
+    .wordmark-logo {
+      height: 24px;
+    }
   }
 
   /* Desktop Nav */

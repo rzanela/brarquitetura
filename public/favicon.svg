@@ -1,5 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" fill="#F3F0EA" />
-  <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" font-family="'Newsreader', Georgia, serif" font-size="34" font-weight="400" fill="#1B1A17" letter-spacing="-1">BR</text>
+  <!-- Símbolo da marca: as três barras azuis do "=" entre BORGES e ROBLES -->
+  <rect width="64" height="64" fill="#F5F6F7" />
+  <g fill="#2868A0">
+    <rect x="12" y="12" width="40" height="8" />
+    <rect x="12" y="28" width="40" height="8" />
+    <rect x="12" y="44" width="40" height="8" />
+  </g>
 </svg>
-

@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import { siteData } from '../data/site';
 import { getRelativeUrl } from '../utils/url';
+import logo from '../assets/marca/logo-borges-robles.png';
 const currentYear = new Date().getFullYear();
 ---
 
@@ -10,7 +12,13 @@ const currentYear = new Date().getFullYear();
       <!-- Coluna 1: Marca & Registro -->
       <div class="col-4 footer-col">
         <div class="footer-brand">
-          <span class="footer-monogram">BR</span>
+          <Image
+            src={logo}
+            alt="Borges e Robles Arquitetura"
+            widths={[300, 600, 767]}
+            sizes="260px"
+            class="footer-logo"
+          />
           <p class="footer-legal">{siteData.legalName}</p>
         </div>
         <p class="type-mono-label footer-cau">
@@ -119,15 +127,15 @@ const currentYear = new Date().getFullYear();
 
   .footer-brand {
     display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
 
-  .footer-monogram {
-    font-family: var(--font-display);
-    font-size: 2.25rem;
-    line-height: 1;
-    letter-spacing: -0.03em;
+  .footer-logo {
+    display: block;
+    width: min(260px, 100%);
+    height: auto;
   }
 
   .footer-legal {

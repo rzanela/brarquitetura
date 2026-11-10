@@ -112,13 +112,13 @@ Concorrentes de Joinville presentes na web usam majoritariamente templates gené
 ### Tokens de cor (CSS custom properties)
 ```css
 :root {
-  --paper:   #F3F0EA; /* fundo off-white quente */
-  --paper-2: #E9E4DB; /* blocos alternados */
-  --ink:     #1B1A17; /* texto principal */
-  --ink-2:   #5E5A52; /* texto secundário / legendas */
-  --line:    #CFC8BC; /* fios de 1px */
-  --accent:  #8C4A2F; /* terracota fosca — uso raro: links ativos, foco, 1 CTA */
-  --focus:   #8C4A2F;
+  --paper:   #F5F6F7; /* fundo branco-gelo neutro (revisado pela logo) */
+  --paper-2: #E8EBEE; /* blocos alternados */
+  --ink:     #141619; /* texto principal */
+  --ink-2:   #555B63; /* texto secundário / legendas */
+  --line:    #D2D7DD; /* fios de 1px */
+  --accent:  #2868A0; /* azul das barras da logo — uso raro: links ativos, foco, 1 CTA */
+  --focus:   #2868A0;
 }
 ```
 Contraste: `--ink` sobre `--paper` ≈ 15:1; `--ink-2` sobre `--paper` ≥ 6:1 (validar AA).

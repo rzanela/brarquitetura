@@ -50,11 +50,11 @@ TOTAL DE JAVASCRIPT TRANSMITIDO (GZIP):             7.45 KB (Meta: < 15.0 KB)
 ## 4. Auditoria de Acessibilidade (WCAG 2.2 AA)
 
 ### 4.1 Contraste de Cores
-Todas as relações de contraste sobre o fundo principal `--paper` (`#F3F0EA`) e secundário `--paper-2` (`#E9E4DB`) foram calculadas:
-- `--ink` (`#1B1A17`): **15.2:1** (Supera o requisito AAA de 7.0:1)
-- `--ink-2` (`#5E5A52`): **6.2:1** (Supera o requisito AA de 4.5:1 para texto corrido e legendas)
-- `--accent` (`#8C4A2F`): **5.1:1** (Supera o requisito AA de 4.5:1 para links e indicadores)
-- `--line` (`#CFC8BC`): Contraste não textual adequado para delimitação estrutural sutil.
+Paleta revisada a partir da logo oficial (preto + azul das barras). Contrastes sobre o fundo principal `--paper` (`#F5F6F7`) / secundário `--paper-2` (`#E8EBEE`):
+- `--ink` (`#141619`): **16.8:1 / 15.2:1** (Supera o requisito AAA de 7.0:1)
+- `--ink-2` (`#555B63`): **6.3:1 / 5.7:1** (Supera o requisito AA de 4.5:1 para texto corrido e legendas)
+- `--accent` (`#2868A0`, azul da logo): **5.4:1 / 4.9:1** (Supera o requisito AA de 4.5:1 para links e indicadores)
+- `--line` (`#D2D7DD`): Contraste não textual adequado para delimitação estrutural sutil.
 - Foco visível global: `outline: 2px solid var(--focus); outline-offset: 3px;` aplicado em `:focus-visible`.
 
 ### 4.2 Navegação Completa por Teclado
