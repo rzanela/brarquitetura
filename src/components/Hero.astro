@@ -1,6 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import { getRelativeUrl } from '../utils/url';
 
 interface Props {
   project: CollectionEntry<'projetos'>;
@@ -9,13 +10,10 @@ interface Props {
 const { project } = Astro.props;
 const { data, id } = project;
 const slug = (data as any).slug || id;
-const projectUrl = `/projetos/${slug}/`;
+const projectUrl = getRelativeUrl(`/projetos/${slug}/`);
 ---
 
 <section class="hero-section" aria-label={`Projeto em destaque: ${data.titulo}`}>
-  <!-- Heading semântico para acessibilidade e SEO sem poluir visualmente a fotografia -->
-  <h1 class="sr-only">Borges e Robles Arquitetura — Arquitetura e Interiores em Joinville/SC</h1>
-
   <div class="hero-media-wrapper">
     <a href={projectUrl} class="hero-link" aria-label={`Ver detalhes do projeto ${data.titulo} em ${data.local}`}>
       <Picture
@@ -30,6 +28,15 @@ const projectUrl = `/projetos/${slug}/`;
         decoding="async"
       />
     </a>
+
+    <!-- Frase de posicionamento sobre a foto (o nome completo segue para leitores de tela/SEO) -->
+    <div class="hero-statement-wrap">
+      <div class="container">
+        <h1 class="hero-statement">
+          Casas e interiores que nascem do lugar.<span class="sr-only"> Borges e Robles Arquitetura — Joinville/SC</span>
+        </h1>
+      </div>
+    </div>
   </div>
 
   <!-- Rodapé do Hero com legenda técnica em tipografia mono -->
@@ -85,6 +92,23 @@ const projectUrl = `/projetos/${slug}/`;
     object-position: center;
     display: block;
     transition: transform var(--motion-duration-slow) cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /* Véu inferior + frase: não captura cliques (a foto continua sendo o link) */
+  .hero-statement-wrap {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: clamp(5rem, 14vw, 10rem) 0 var(--space-lg);
+    background: linear-gradient(to top, rgba(14, 18, 24, 0.62), rgba(14, 18, 24, 0));
+    pointer-events: none;
+  }
+
+  .hero-statement {
+    max-width: 16ch;
+    color: #F5F6F7;
+    font-size: clamp(1.9rem, 4.2vw, 4rem);
+    line-height: 1.1;
+    text-wrap: balance;
   }
 
   @media (min-width: 768px) {

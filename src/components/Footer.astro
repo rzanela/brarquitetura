@@ -1,9 +1,17 @@
 ---
 import { Image } from 'astro:assets';
-import { siteData } from '../data/site';
+import { siteData, hasWhatsApp } from '../data/site';
+import { confirmed } from '../utils/pending';
 import { getRelativeUrl } from '../utils/url';
+import { buildWhatsAppUrl } from '../data/whatsapp';
 import logo from '../assets/marca/logo-borges-robles.png';
 const currentYear = new Date().getFullYear();
+
+// Campos ainda pendentes ([VALIDAR]/[SUBSTITUIR]) ficam ocultos até o dado real
+const cau = confirmed(siteData.cau);
+const coordinates = confirmed(siteData.geo.displayCoordinates);
+const hours = confirmed(siteData.hours.display);
+const email = confirmed(siteData.contact.email);
 ---
 
 <footer class="site-footer hairline-top">
@@ -21,11 +29,13 @@ const currentYear = new Date().getFullYear();
           />
           <p class="footer-legal">{siteData.legalName}</p>
         </div>
-        <p class="type-mono-label footer-cau">
-          CAU/SC: {siteData.cau}
-        </p>
+        {cau && (
+          <p class="type-mono-label footer-cau">
+            CAU/SC: {cau}
+          </p>
+        )}
         <p class="type-body text-ink-2 footer-desc">
-          Arquitetura e interiores de alto padrão. Projetos premiados no Norte Catarinense.
+          Arquitetura e interiores de alto padrão em Joinville, no Norte Catarinense e no litoral.
         </p>
       </div>
 
@@ -39,23 +49,28 @@ const currentYear = new Date().getFullYear();
           <p class="type-mono-label text-ink-2 mt-xs">{siteData.address.postalCode}</p>
         </address>
 
-        <div class="footer-geo mt-sm">
-          <span class="type-mono-label text-accent">{siteData.geo.displayCoordinates}</span>
-        </div>
+        {coordinates && (
+          <div class="footer-geo mt-sm">
+            <span class="type-mono-label text-accent">{coordinates}</span>
+          </div>
+        )}
 
-        <div class="footer-hours mt-sm">
-          <span class="type-mono-label">Atendimento:</span>
-          <p class="type-mono-label text-ink-2">{siteData.hours.display}</p>
-        </div>
+        {hours && (
+          <div class="footer-hours mt-sm">
+            <span class="type-mono-label">Atendimento:</span>
+            <p class="type-mono-label text-ink-2">{hours}</p>
+          </div>
+        )}
       </div>
 
       <!-- Coluna 3: Contato & Redes -->
       <div class="col-4 footer-col">
         <div class="footer-section-title type-mono-label">Contato Direto</div>
         <ul class="footer-contact-list">
+          {hasWhatsApp && (
           <li>
             <a 
-              href={`https://wa.me/${siteData.contact.whatsapp}?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20BrArq%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto.`}
+              href={buildWhatsAppUrl({ origem: 'geral' })}
               class="footer-link text-accent"
               target="_blank"
               rel="noopener noreferrer"
@@ -64,18 +79,21 @@ const currentYear = new Date().getFullYear();
               <span class="type-body">{siteData.contact.whatsappFormatted} ↗</span>
             </a>
           </li>
+          )}
           <li>
             <a href={`tel:${siteData.contact.phone}`} class="footer-link">
               <span class="type-mono-label">Telefone</span>
               <span class="type-body text-ink">{siteData.contact.phoneFormatted}</span>
             </a>
           </li>
-          <li>
-            <a href={`mailto:${siteData.contact.email}`} class="footer-link">
-              <span class="type-mono-label">E-mail</span>
-              <span class="type-body text-ink">{siteData.contact.email}</span>
-            </a>
-          </li>
+          {email && (
+            <li>
+              <a href={`mailto:${email}`} class="footer-link">
+                <span class="type-mono-label">E-mail</span>
+                <span class="type-body text-ink">{email}</span>
+              </a>
+            </li>
+          )}
           <li>
             <a 
               href={siteData.social.instagram} 

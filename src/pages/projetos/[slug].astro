@@ -7,7 +7,7 @@ import FichaTecnica from '../../components/FichaTecnica.astro';
 import Gallery from '../../components/Gallery.astro';
 import Lightbox from '../../components/Lightbox.astro';
 import { buildWhatsAppUrl } from '../../data/whatsapp';
-import { siteData } from '../../data/site';
+import { siteData, hasWhatsApp } from '../../data/site';
 import { getRelativeUrl } from '../../utils/url';
 
 export async function getStaticPaths() {
@@ -17,20 +17,22 @@ export async function getStaticPaths() {
   return sorted.map((project, index) => {
     const slug = (project.data as any).slug || project.id;
     const nextProject = sorted[(index + 1) % sorted.length];
+    const prevProject = sorted[(index - 1 + sorted.length) % sorted.length];
     return {
       params: { slug },
-      props: { project, nextProject },
+      props: { project, nextProject, prevProject },
     };
   });
 }
 
-const { project, nextProject } = Astro.props;
+const { project, nextProject, prevProject } = Astro.props;
 const { data, id } = project;
 const slug = (data as any).slug || id;
 const { Content } = await render(project);
 
 const nextData = nextProject.data;
 const nextSlug = (nextData as any).slug || nextProject.id;
+const prevSlug = (prevProject.data as any).slug || prevProject.id;
 
 // Links de conversão contextual da seção 7.1
 const whatsappProjectUrl = buildWhatsAppUrl({
@@ -174,9 +176,10 @@ const projectJsonLd = {
           </div>
 
           <div class="col-4 cta-actions-col">
+            {hasWhatsApp && (
             <a 
               href={whatsappProjectUrl} 
-              class="btn-cta-whatsapp"
+              class="btn-cta-primary"
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Conversar pelo WhatsApp sobre o projeto ${data.titulo}`}
@@ -184,10 +187,11 @@ const projectJsonLd = {
               <span class="type-mono-label">Falar pelo WhatsApp</span>
               <span class="arrow" aria-hidden="true">↗</span>
             </a>
+            )}
 
             <a 
               href={briefingProjectUrl} 
-              class="link-cta-briefing mt-xs"
+              class:list={[hasWhatsApp ? 'link-cta-briefing mt-xs' : 'btn-cta-primary']}
               aria-label={`Iniciar briefing com referência ao projeto ${data.titulo}`}
             >
               <span class="type-mono-label">Iniciar briefing com este projeto</span>
@@ -203,6 +207,10 @@ const projectJsonLd = {
       <div class="container next-project-container">
         <div class="next-project-header">
           <span class="type-mono-label text-ink-2">Próximo projeto</span>
+          <a href={getRelativeUrl(`/projetos/${prevSlug}/`)} class="prev-project-link">
+            <span class="arrow" aria-hidden="true">←</span>
+            <span class="type-mono-label">Anterior: {prevProject.data.titulo}</span>
+          </a>
         </div>
 
         <a href={getRelativeUrl(`/projetos/${nextSlug}/`)} class="next-project-card mt-sm">
@@ -284,6 +292,26 @@ const projectJsonLd = {
     color: var(--ink);
     text-decoration: none;
     transition: color var(--motion-duration-fast) ease;
+  }
+
+  .next-project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+
+  .prev-project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    color: var(--ink-2);
+  }
+
+  .prev-project-link:hover {
+    color: var(--accent);
   }
 
   .back-link:hover {
@@ -370,7 +398,7 @@ const projectJsonLd = {
     }
   }
 
-  .btn-cta-whatsapp {
+  .btn-cta-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -384,7 +412,12 @@ const projectJsonLd = {
     transition: background-color var(--motion-duration-fast) ease;
   }
 
-  .btn-cta-whatsapp:hover {
+  /* O rótulo herda a cor clara do botão (type-mono-label define --ink-2 por padrão) */
+  .btn-cta-primary .type-mono-label {
+    color: inherit;
+  }
+
+  .btn-cta-primary:hover {
     background-color: var(--accent);
     border-color: var(--accent);
   }

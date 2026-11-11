@@ -3,7 +3,8 @@ import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import SectionLabel from '../components/SectionLabel.astro';
 import CtaBlock from '../components/CtaBlock.astro';
-import { awardsData } from '../data/premios';
+import { confirmedAwards } from '../data/premios';
+import { confirmed } from '../utils/pending';
 import { siteData } from '../data/site';
 
 // Importação das fotografias institucionais locais geradas
@@ -41,6 +42,18 @@ const detailedSteps = [
     deliverables: "Relatórios periódicos de visita técnica com registro fotográfico e checklist de conformidade."
   }
 ];
+
+// Sócios: enquanto nome/CAU não forem confirmados, exibe só o sobrenome da marca
+const partners = [
+  { surname: 'Borges', img: socioBorgesImg },
+  { surname: 'Robles', img: socioRoblesImg },
+].map((p, i) => ({
+  ...p,
+  name: confirmed(siteData.partners[i].name) ?? p.surname,
+  cau: confirmed(siteData.partners[i].cau),
+}));
+
+const showAwards = confirmedAwards.length > 0;
 
 const coverageAreas = [
   {
@@ -83,9 +96,7 @@ const coverageAreas = [
             <p class="type-mono-label text-ink-2 mt-xs">
               {siteData.address.street} — Joinville/SC
             </p>
-            <p class="type-mono-label text-ink-2">
-              Desde [VALIDAR: ano de fundação, ex. 2018]
-            </p>
+            {/* [VALIDAR: incluir "Desde <ano de fundação>" quando confirmado] */}
           </div>
         </div>
       </header>
@@ -109,9 +120,7 @@ const coverageAreas = [
           <span class="type-mono-label text-ink">
             ATELIÊ BORGES E ROBLES ARQUITETURA — RUA LAGES, 743 — JOINVILLE/SC
           </span>
-          <span class="type-mono-label text-ink-2">
-            [SUBSTITUIR: Crédito da fotografia do ateliê / equipe]
-          </span>
+          {/* [SUBSTITUIR: crédito da fotografia do ateliê / equipe] */}
         </div>
       </section>
 
@@ -156,69 +165,30 @@ const coverageAreas = [
           <SectionLabel number="03" title="Sócios e Direção" id="partners-label" />
           
           <div class="grid-12 mt-lg partners-grid">
-            <!-- Sócio 1: Borges -->
-            <article class="col-6 partner-card">
-              <div class="partner-media ratio-4-5">
-                <Picture
-                  src={socioBorgesImg}
-                  formats={['avif', 'webp']}
-                  widths={[480, 800, 1200]}
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  alt="Retrato oficial do sócio-fundador Arquiteto Borges"
-                  class="partner-img"
-                  loading="lazy"
-                />
-              </div>
+            {/* [SUBSTITUIR: formação (instituição, ano) e bio curta de cada sócio] */}
+            {partners.map((partner) => (
+              <article class="col-6 partner-card">
+                <div class="partner-media ratio-4-5">
+                  <Picture
+                    src={partner.img}
+                    formats={['avif', 'webp']}
+                    widths={[480, 800, 1200]}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    alt={`Retrato de ${partner.name}, sócio-fundador da Borges e Robles Arquitetura`}
+                    class="partner-img"
+                    loading="lazy"
+                  />
+                </div>
 
-              <div class="partner-info mt-md">
-                <span class="type-mono-label text-accent">Sócio-Fundador</span>
-                <h3 class="partner-name mt-xs">
-                  {siteData.partners[0].name}
-                </h3>
-                <p class="type-mono-label text-ink-2 mt-xs">
-                  [SUBSTITUIR: Arquiteto e Urbanista — Instituição de Ensino, Ano]
-                </p>
-                <p class="type-mono-label text-ink mt-xs">
-                  CAU/SC: {siteData.partners[0].cau}
-                </p>
-
-                <p class="type-body text-ink-2 mt-sm partner-bio">
-                  [SUBSTITUIR: Responsável pela concepção arquitetônica, diretrizes conceituais de partido e pesquisa contínua sobre a integração entre forma construída e paisagem em Joinville e litoral.]
-                </p>
-              </div>
-            </article>
-
-            <!-- Sócio 2: Robles -->
-            <article class="col-6 partner-card">
-              <div class="partner-media ratio-4-5">
-                <Picture
-                  src={socioRoblesImg}
-                  formats={['avif', 'webp']}
-                  widths={[480, 800, 1200]}
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  alt="Retrato oficial do sócio-fundador Arquiteto Robles"
-                  class="partner-img"
-                  loading="lazy"
-                />
-              </div>
-
-              <div class="partner-info mt-md">
-                <span class="type-mono-label text-accent">Sócio-Fundador</span>
-                <h3 class="partner-name mt-xs">
-                  {siteData.partners[1].name}
-                </h3>
-                <p class="type-mono-label text-ink-2 mt-xs">
-                  [SUBSTITUIR: Arquiteto e Urbanista — Instituição de Ensino, Ano]
-                </p>
-                <p class="type-mono-label text-ink mt-xs">
-                  CAU/SC: {siteData.partners[1].cau}
-                </p>
-
-                <p class="type-body text-ink-2 mt-sm partner-bio">
-                  [SUBSTITUIR: Coordena o desenvolvimento dos projetos executivos, o rigor de detalhamento construtivo e o acompanhamento minucioso de canteiro nas obras de alto padrão do escritório.]
-                </p>
-              </div>
-            </article>
+                <div class="partner-info mt-md">
+                  <span class="type-mono-label text-accent">Sócio-Fundador</span>
+                  <h3 class="partner-name mt-xs">{partner.name}</h3>
+                  {partner.cau && (
+                    <p class="type-mono-label text-ink mt-xs">CAU/SC: {partner.cau}</p>
+                  )}
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -266,6 +236,7 @@ const coverageAreas = [
       </section>
 
       <!-- 6. Prêmios e Publicações Completos (seção 6.4: id="reconhecimento" alimentado por premios.ts) -->
+      {showAwards && (
       <section class="office-awards-section mt-2xl hairline-top" id="reconhecimento" aria-labelledby="full-awards-label">
         <div class="pt-xl">
           <SectionLabel number="05" title="Reconhecimento e Publicações" id="full-awards-label" />
@@ -283,7 +254,7 @@ const coverageAreas = [
 
             <div class="col-8">
               <ul class="full-awards-list" role="list">
-                {awardsData.map((item) => (
+                {confirmedAwards.map((item) => (
                   <li class="full-award-row hairline-bottom">
                     <div class="award-col-year">
                       <span class="type-mono-label text-accent">{item.ano}</span>
@@ -310,10 +281,12 @@ const coverageAreas = [
         </div>
       </section>
 
+      )}
+
       <!-- 7. Área de Atuação (seção 6.4: Joinville, Norte Catarinense, litoral) -->
       <section class="office-coverage-section mt-2xl hairline-top" aria-labelledby="coverage-label">
         <div class="pt-xl">
-          <SectionLabel number="06" title="Área de Atuação" id="coverage-label" />
+          <SectionLabel number={showAwards ? '06' : '05'} title="Área de Atuação" id="coverage-label" />
 
           <div class="grid-12 mt-md">
             <div class="col-4">
@@ -321,11 +294,7 @@ const coverageAreas = [
               <p class="type-body text-ink-2 mt-sm">
                 Com base física em Joinville, o escritório atua em todo o Norte de Santa Catarina, litoral e sob demanda em projetos especiais.
               </p>
-              <div class="mt-md">
-                <span class="type-mono-label text-ink-2">
-                  [VALIDAR: Cidades e raio de atendimento do escritório]
-                </span>
-              </div>
+              {/* [VALIDAR: cidades e raio de atendimento do escritório] */}
             </div>
 
             <div class="col-8">

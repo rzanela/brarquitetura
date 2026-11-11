@@ -1,6 +1,7 @@
 ---
 import { buildWhatsAppUrl } from '../data/whatsapp';
 import { getRelativeUrl } from '../utils/url';
+import { hasWhatsApp } from '../data/site';
 
 interface Props {
   title?: string;
@@ -33,6 +34,7 @@ const whatsappUrl = buildWhatsAppUrl({ origem: 'geral' });
           <span class="arrow" aria-hidden="true">→</span>
         </a>
 
+        {hasWhatsApp && (
         <a 
           href={whatsappUrl} 
           class="link-whatsapp mt-xs" 
@@ -43,6 +45,7 @@ const whatsappUrl = buildWhatsAppUrl({ origem: 'geral' });
           <span class="type-mono-label">ou fale pelo WhatsApp</span>
           <span class="arrow" aria-hidden="true">↗</span>
         </a>
+        )}
       </div>
     </div>
   </div>

@@ -22,7 +22,7 @@ destaque: true
 ordem: 2
 ---
 
-O projeto Madville responde à demanda por um espaço corporativo e comercial de presença contemporânea sóbria em Joinville/SC [VALIDAR: localização exata].
+O projeto Madville responde à demanda por um espaço corporativo e comercial de presença contemporânea sóbria em Joinville/SC <!-- [VALIDAR: localização exata] -->.
 
 A composição arquitetônica estrutura-se a partir de um esqueleto metálico modular aparente, pontuado por planos de vidro de controle solar e painéis cimentícios texturizados. Na fachada principal, uma sequência ritmada de brises verticais atua como elemento de identidade visual e dispositivo passivo de eficiência energética, filtrando a incidência solar direta nos postos de trabalho e reduzindo a carga térmica do edifício.
 

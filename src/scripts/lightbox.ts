@@ -10,7 +10,14 @@ export interface LightboxItem {
   caption?: string;
 }
 
+// Ouvintes globais da página anterior são descartados a cada navegação (ClientRouter)
+let controller: AbortController | null = null;
+
 export function initLightbox() {
+  controller?.abort();
+  controller = new AbortController();
+  const { signal } = controller;
+
   const dialog = document.getElementById('project-lightbox') as HTMLDialogElement | null;
   if (!dialog) return;
 
@@ -108,7 +115,7 @@ export function initLightbox() {
     } else if (e.key === 'Escape') {
       close();
     }
-  });
+  }, { signal });
 
   // Detecção de gestos Swipe no mobile
   let touchStartX = 0;

@@ -82,6 +82,7 @@ picture {
 .mt-lg  { margin-top: var(--space-lg); }
 .mt-xl  { margin-top: var(--space-xl); }
 .mt-2xl { margin-top: var(--space-2xl); }
+.mb-xs  { margin-bottom: var(--space-xs); }
 .mb-md  { margin-bottom: var(--space-md); }
 .mb-lg  { margin-bottom: var(--space-lg); }
 .pt-sm  { padding-top: var(--space-sm); }

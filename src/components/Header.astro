@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { siteData } from '../data/site';
 import { getRelativeUrl } from '../utils/url';
+import { confirmed } from '../utils/pending';
 import logo from '../assets/marca/logo-borges-robles.png';
 import logoBranca from '../assets/marca/logo-borges-robles-branca.png';
 
@@ -17,6 +18,8 @@ const navItems = [
   { label: 'Escritório', href: getRelativeUrl('/escritorio/') },
   { label: 'Contato', href: getRelativeUrl('/contato/') }
 ];
+
+const coordinates = confirmed(siteData.geo.displayCoordinates);
 ---
 
 <header class:list={['site-header', { 'header-transparent': transparentOverHero }]} id="site-header">
@@ -59,18 +62,6 @@ const navItems = [
             </a>
           </li>
         ))}
-        <li>
-          <a 
-            href={`https://wa.me/${siteData.contact.whatsapp}?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20BrArq%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto.`}
-            class="nav-link nav-whatsapp"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Conversar pelo WhatsApp"
-          >
-            WhatsApp
-            <span class="arrow" aria-hidden="true">↗</span>
-          </a>
-        </li>
       </ul>
     </nav>
 
@@ -105,21 +96,11 @@ const navItems = [
               </a>
             </li>
           ))}
-          <li>
-            <a 
-              href={`https://wa.me/${siteData.contact.whatsapp}?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20BrArq%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto.`}
-              class="mobile-nav-link mobile-whatsapp"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              WhatsApp <span class="arrow" aria-hidden="true">↗</span>
-            </a>
-          </li>
         </ul>
       </nav>
       <div class="mobile-overlay-footer hairline-top">
         <p class="type-mono-label">{siteData.address.fullFormatted}</p>
-        <p class="type-mono-label">{siteData.geo.displayCoordinates}</p>
+        {coordinates && <p class="type-mono-label">{coordinates}</p>}
       </div>
     </div>
   </div>
@@ -127,23 +108,27 @@ const navItems = [
 
 <script>
   import { initMenu } from '../scripts/menu';
-  initMenu();
 
-  // Tratamento de rolagem do header (vira --paper com fio de 1px)
-  const header = document.getElementById('site-header');
-  function handleScroll() {
-    if (!header) return;
-    if (window.scrollY > 20) {
-      header.classList.add('is-scrolled');
-    } else {
-      header.classList.remove('is-scrolled');
-    }
-  }
-  window.addEventListener('scroll', handleScroll, { passive: true });
+  // O ClientRouter troca o <header> a cada navegação: menu e rolagem precisam
+  // ser religados ao novo elemento em toda página (astro:page-load), e os
+  // ouvintes da página anterior são descartados via AbortController.
+  let controller: AbortController | null = null;
+
   document.addEventListener('astro:page-load', () => {
+    controller?.abort();
+    controller = new AbortController();
+    const { signal } = controller;
+
+    initMenu(signal);
+
+    // Header vira --paper com fio de 1px ao rolar
+    const header = document.getElementById('site-header');
+    const handleScroll = () => {
+      header?.classList.toggle('is-scrolled', window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true, signal });
     handleScroll();
   });
-  handleScroll();
 </script>
 
 <style>
@@ -188,9 +173,6 @@ const navItems = [
     border-bottom-color: #F5F6F7;
   }
 
-  .site-header.header-transparent:not(.is-scrolled):not(:has(.mobile-overlay.is-open)) .nav-whatsapp {
-    color: #A9CBEA;
-  }
 
   .header-inner {
     height: 100%;
@@ -267,20 +249,6 @@ const navItems = [
     background-color: var(--brand-blue);
   }
 
-  .nav-whatsapp {
-    color: var(--accent);
-  }
-
-  .nav-whatsapp .arrow {
-    display: inline-block;
-    font-size: 0.85em;
-    margin-left: 0.2em;
-    transition: transform var(--motion-duration-fast) ease;
-  }
-
-  .nav-whatsapp:hover .arrow {
-    transform: translate(2px, -2px);
-  }
 
   /* Trigger Mobile */
   .mobile-menu-trigger {
@@ -291,6 +259,14 @@ const navItems = [
     color: var(--ink);
     padding: 0.5rem 0;
     border-bottom: 1px solid var(--ink);
+    position: relative;
+  }
+
+  /* Área de toque de ~44px sem alterar o desenho do botão */
+  .mobile-menu-trigger::after {
+    content: '';
+    position: absolute;
+    inset: -8px -12px;
   }
 
   /* Overlay Mobile */
@@ -343,9 +319,6 @@ const navItems = [
     color: var(--accent);
   }
 
-  .mobile-whatsapp {
-    color: var(--accent);
-  }
 
   .mobile-overlay-footer {
     padding-top: 1.5rem;

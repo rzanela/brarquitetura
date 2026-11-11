@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import { siteData } from '../data/site';
 import { getRelativeUrl } from '../utils/url';
+import { confirmed } from '../utils/pending';
 
 import '../styles/tokens.css';
 import '../styles/base.css';
@@ -52,7 +53,7 @@ const jsonLd = {
   image: ogImage,
   description: siteData.description,
   telephone: siteData.contact.phone,
-  email: siteData.contact.email,
+  email: confirmed(siteData.contact.email), // omitido no JSON-LD enquanto pendente
   address: {
     '@type': 'PostalAddress',
     streetAddress: siteData.address.street,

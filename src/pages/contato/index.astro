@@ -2,12 +2,17 @@
 import Base from '../../layouts/Base.astro';
 import SectionLabel from '../../components/SectionLabel.astro';
 import BriefingForm from '../../components/BriefingForm.astro';
-import { siteData } from '../../data/site';
+import { siteData, hasWhatsApp } from '../../data/site';
+import { confirmed } from '../../utils/pending';
 import { buildWhatsAppUrl } from '../../data/whatsapp';
 import { getRelativeUrl } from '../../utils/url';
 
 // Captura opcional do parâmetro ?projeto= da URL
 const initialProject = Astro.url.searchParams.get('projeto') || undefined;
+
+const email = confirmed(siteData.contact.email);
+const hours = confirmed(siteData.hours.display);
+const coordinates = confirmed(siteData.geo.displayCoordinates);
 
 const whatsappDirectUrl = buildWhatsAppUrl({
   origem: initialProject ? 'projeto' : 'geral',
@@ -28,7 +33,7 @@ const whatsappDirectUrl = buildWhatsAppUrl({
           Vamos conversar sobre o seu projeto?
         </h1>
         <p class="type-body text-ink-2 contact-page-lead mt-xs">
-          Preencha o briefing preliminar ou entre em contato diretamente pelo WhatsApp para agendar uma reunião no nosso ateliê.
+          Preencha o briefing preliminar ou entre em contato diretamente {hasWhatsApp ? 'pelo WhatsApp' : 'por telefone'} para agendar uma reunião no nosso ateliê.
         </p>
       </header>
 
@@ -57,6 +62,7 @@ const whatsappDirectUrl = buildWhatsAppUrl({
 
             <!-- Contatos Imediatos -->
             <div class="direct-contact-box mt-md">
+              {hasWhatsApp && (
               <a 
                 href={whatsappDirectUrl} 
                 class="contact-direct-link btn-whatsapp-direct" 
@@ -75,16 +81,19 @@ const whatsappDirectUrl = buildWhatsAppUrl({
                   Atendimento ágil para dúvidas iniciais e agendamento de reuniões.
                 </p>
               </a>
+              )}
 
               <div class="contact-lines-list mt-md hairline-top pt-sm">
-                <div class="contact-line">
-                  <span class="type-mono-label text-ink-2">E-mail:</span>
-                  <a href={`mailto:${siteData.contact.email}`} class="contact-text-link type-body text-ink">
-                    {siteData.contact.email}
-                  </a>
-                </div>
+                {email && (
+                  <div class="contact-line mb-xs">
+                    <span class="type-mono-label text-ink-2">E-mail:</span>
+                    <a href={`mailto:${email}`} class="contact-text-link type-body text-ink">
+                      {email}
+                    </a>
+                  </div>
+                )}
 
-                <div class="contact-line mt-xs">
+                <div class="contact-line">
                   <span class="type-mono-label text-ink-2">Telefone:</span>
                   <a href={`tel:${siteData.contact.phone}`} class="contact-text-link type-body text-ink">
                     {siteData.contact.phoneFormatted}
@@ -110,10 +119,12 @@ const whatsappDirectUrl = buildWhatsAppUrl({
                 <p class="type-mono-label text-ink-2 mt-xs">{siteData.address.postalCode}</p>
               </address>
 
-              <div class="office-hours mt-sm">
-                <span class="type-mono-label text-ink-2">Horário de atendimento:</span>
-                <p class="type-mono-label text-ink">{siteData.hours.display}</p>
-              </div>
+              {hours && (
+                <div class="office-hours mt-sm">
+                  <span class="type-mono-label text-ink-2">Horário de atendimento:</span>
+                  <p class="type-mono-label text-ink">{hours}</p>
+                </div>
+              )}
 
               <!-- Imagem estática leve que vira link para o Google Maps -->
               <div class="static-map-wrapper mt-md">
@@ -139,11 +150,11 @@ const whatsappDirectUrl = buildWhatsAppUrl({
                 </a>
               </div>
 
-              <div class="geo-coordinates mt-xs">
-                <span class="type-mono-label text-ink-2">
-                  {siteData.geo.displayCoordinates}
-                </span>
-              </div>
+              {coordinates && (
+                <div class="geo-coordinates mt-xs">
+                  <span class="type-mono-label text-ink-2">{coordinates}</span>
+                </div>
+              )}
             </div>
           </div>
         </aside>

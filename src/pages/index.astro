@@ -8,6 +8,7 @@ import AwardsList from '../components/AwardsList.astro';
 import ProcessSteps from '../components/ProcessSteps.astro';
 import CtaBlock from '../components/CtaBlock.astro';
 import { getRelativeUrl } from '../utils/url';
+import { confirmedAwards } from '../data/premios';
 
 // Obtenção da coleção de projetos tipada via Zod
 const allProjects = await getCollection('projetos');
@@ -18,6 +19,9 @@ const heroProject = sortedProjects.find(p => p.id === 'casa-rb' || (p.data as an
 
 // Projetos selecionados para a grade da Home (destaque = true, limitado a 6)
 const featuredProjects = sortedProjects.filter(p => p.data.destaque).slice(0, 6);
+
+// Prêmios só aparecem quando houver itens confirmados pelo cliente (data/premios.ts)
+const showAwards = confirmedAwards.length > 0;
 ---
 
 <Base transparentHeader={true} showDebugGrid={false}>
@@ -32,7 +36,8 @@ const featuredProjects = sortedProjects.filter(p => p.data.destaque).slice(0, 6)
       <div class="grid-12 mt-md">
         <div class="col-8 offset-2 manifesto-content">
           <p class="type-manifesto manifesto-text">
-            Projetamos casas e espaços de trabalho a partir do terreno, da luz e de quem vai viver neles. Desde [VALIDAR: ano de fundação, ex. 2018], em Joinville.
+            Projetamos casas e espaços de trabalho a partir do terreno, da luz e de quem vai viver neles, em Joinville e no litoral catarinense.
+            {/* [VALIDAR: incluir ano de fundação quando confirmado, ex. "Desde 2018, em Joinville."] */}
           </p>
 
           <p class="type-body text-ink-2 mt-md manifesto-subtext">
@@ -67,6 +72,7 @@ const featuredProjects = sortedProjects.filter(p => p.data.destaque).slice(0, 6)
   </section>
 
   <!-- 6.1 Item 5: Reconhecimento (03 — Prêmios e publicações) em lista tipográfica sóbria -->
+  {showAwards && (
   <section class="section-awards hairline-bottom" aria-labelledby="awards-label">
     <div class="container">
       <SectionLabel number="03" title="Prêmios e publicações" id="awards-label" />
@@ -76,11 +82,12 @@ const featuredProjects = sortedProjects.filter(p => p.data.destaque).slice(0, 6)
       </div>
     </div>
   </section>
+  )}
 
   <!-- 6.1 Item 6: Processo (04 — Como trabalhamos) com 4 etapas numeradas sem ícones -->
   <section class="section-process hairline-bottom" aria-labelledby="process-label">
     <div class="container">
-      <SectionLabel number="04" title="Como trabalhamos" id="process-label" />
+      <SectionLabel number={showAwards ? '04' : '03'} title="Como trabalhamos" id="process-label" />
 
       <div class="mt-lg">
         <ProcessSteps />

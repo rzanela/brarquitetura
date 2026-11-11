@@ -1,5 +1,5 @@
 ---
-import { awardsData } from '../data/premios';
+import { confirmedAwards } from '../data/premios';
 import { getRelativeUrl } from '../utils/url';
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { limit } = Astro.props;
-const displayAwards = limit ? awardsData.slice(0, limit) : awardsData;
+const displayAwards = limit ? confirmedAwards.slice(0, limit) : confirmedAwards;
 ---
 
 <div class="awards-wrapper">

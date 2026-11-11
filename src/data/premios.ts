@@ -1,3 +1,5 @@
+import { isPending } from '../utils/pending';
+
 export interface AwardItem {
   ano: number;
   premio: string;
@@ -36,3 +38,8 @@ export const awardsData: AwardItem[] = [
   }
 ];
 
+
+// Apenas prêmios com todos os campos visíveis confirmados (sem [VALIDAR]/[SUBSTITUIR]).
+export const confirmedAwards = awardsData.filter(
+  (a) => !isPending(a.premio) && !isPending(a.projeto) && (!a.entidade || !isPending(a.entidade))
+);

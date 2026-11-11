@@ -3,6 +3,11 @@ import Base from '../layouts/Base.astro';
 import SectionLabel from '../components/SectionLabel.astro';
 import { siteData } from '../data/site';
 import { getRelativeUrl } from '../utils/url';
+import { confirmed } from '../utils/pending';
+
+// Dados ainda pendentes ficam fora do texto até confirmação do cliente
+const cnpj = confirmed('[SUBSTITUIR: CNPJ]');
+const email = confirmed(siteData.contact.email);
 ---
 
 <Base 
@@ -31,7 +36,7 @@ import { getRelativeUrl } from '../utils/url';
           <section class="privacy-section">
             <h2 class="section-title">1. Identificação do Controlador</h2>
             <p>
-              Esta política estabelece o compromisso da <strong>{siteData.legalName}</strong> (nome fantasia <strong>{siteData.name}</strong>), inscrita no CNPJ sob o nº <code>[SUBSTITUIR: CNPJ]</code>, com sede na Rua Lages, 743 — América, Joinville/SC, CEP 89204-010, com a privacidade, transparência e segurança no tratamento dos dados pessoais de seus clientes, parceiros e visitantes deste sítio eletrônico.
+              Esta política estabelece o compromisso da <strong>{siteData.legalName}</strong> (nome fantasia <strong>{siteData.name}</strong>){cnpj && <>, inscrita no CNPJ sob o nº {cnpj}</>}, com sede na Rua Lages, 743 — América, Joinville/SC, CEP 89204-010, com a privacidade, transparência e segurança no tratamento dos dados pessoais de seus clientes, parceiros e visitantes deste sítio eletrônico.
             </p>
           </section>
 
@@ -117,14 +122,24 @@ import { getRelativeUrl } from '../utils/url';
             </p>
             <div class="contact-box mt-md">
               <span class="type-mono-label text-ink-2">CANAL EXCLUSIVO DE PRIVACIDADE E DADOS</span>
-              <p class="contact-email mt-xs">
-                <a href={`mailto:${siteData.contact.email}`} class="link-underlined">
-                  {siteData.contact.email}
-                </a>
-              </p>
-              <p class="type-body text-ink-2 mt-xs">
-                Assunto recomendado: <code>Solicitação LGPD — [Seu Nome]</code>
-              </p>
+              {email ? (
+                <p class="contact-email mt-xs">
+                  <a href={`mailto:${email}`} class="link-underlined">
+                    {email}
+                  </a>
+                </p>
+              ) : (
+                <p class="contact-email mt-xs">
+                  <a href={`tel:${siteData.contact.phone}`} class="link-underlined">
+                    {siteData.contact.phoneFormatted}
+                  </a>
+                </p>
+              )}
+              {email && (
+                <p class="type-body text-ink-2 mt-xs">
+                  Assunto recomendado: <code>Solicitação LGPD — [Seu Nome]</code>
+                </p>
+              )}
               <p class="type-body text-ink-2 mt-xs">
                 Endereço postal: Rua Lages, 743 — América, Joinville/SC, CEP 89204-010.
               </p>

@@ -179,7 +179,7 @@ const { initialProject } = Astro.props;
 
         <div class="form-group">
           <label for="faixa_investimento" class="form-label type-mono-label">
-            Faixa estimada de investimento na obra [VALIDAR faixas com o Diretor] <span class="req">*</span>
+            Faixa estimada de investimento na obra {/* [VALIDAR faixas com o Diretor] */} <span class="req">*</span>
           </label>
           <select id="faixa_investimento" name="faixa_investimento" class="form-select" required>
             <option value="Até R$ 500 mil">Até R$ 500 mil</option>
@@ -329,7 +329,7 @@ const { initialProject } = Astro.props;
   .progress-fill {
     height: 100%;
     background-color: var(--accent);
-    transition: width var(--motion-duration-normal) cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition: width var(--motion-duration-base) cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 
   /* Fieldsets e degradação progressiva */

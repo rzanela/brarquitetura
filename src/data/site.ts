@@ -1,3 +1,5 @@
+import { isPending } from '../utils/pending';
+
 export interface SiteConfig {
   name: string;
   legalName: string;
@@ -98,3 +100,8 @@ export const siteData: SiteConfig = {
   ]
 };
 
+
+// O WhatsApp só aparece no site quando houver número real confirmado.
+// Enquanto o campo tiver [SUBSTITUIR…], todos os links de WhatsApp ficam ocultos
+// (evita apontar para um número fictício que pode pertencer a terceiros).
+export const hasWhatsApp = !isPending(siteData.contact.whatsapp);

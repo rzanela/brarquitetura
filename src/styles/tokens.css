@@ -8,6 +8,7 @@
   --brand-blue: #2680C2; /* azul exato das barras da logo — só elementos gráficos (3.9:1, abaixo de AA p/ texto) */
   --accent: #2868A0;  /* azul da marca escurecido p/ texto: links ativos, foco, CTA (5.4:1 / 4.9:1) */
   --focus: #2868A0;
+  --accent-on-dark: #A9CBEA; /* destaque sobre fundos escuros (lightbox, fotos) */
 
   /* Famílias tipográficas — Saira self-hosted (ver type.css).
      --font-mono mantém o nome por compatibilidade: são os rótulos técnicos

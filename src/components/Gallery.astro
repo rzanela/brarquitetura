@@ -144,7 +144,8 @@ const { images, projectTitle, location = 'Joinville/SC', excerpt } = Astro.props
     pointer-events: none;
   }
 
-  .gallery-trigger:hover .gallery-zoom-indicator {
+  .gallery-trigger:hover .gallery-zoom-indicator,
+  .gallery-trigger:focus-visible .gallery-zoom-indicator {
     opacity: 1;
   }
 

@@ -38,6 +38,9 @@ const projectUrl = getRelativeUrl(`/projetos/${slug}/`);
         loading={priority ? 'eager' : 'lazy'}
         decoding="async"
       />
+      {data.status === 'em-andamento' && (
+        <span class="card-status-badge type-mono-label">Em andamento</span>
+      )}
     </div>
 
     <div class="card-content mt-sm">
@@ -86,6 +89,18 @@ const projectUrl = getRelativeUrl(`/projetos/${slug}/`);
     overflow: hidden;
     background-color: var(--paper-2);
     border-radius: 2px;
+  }
+
+  /* Etiqueta de fase sobre a foto (projetos em obra / em desenvolvimento) */
+  .card-status-badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    padding: 0.3rem 0.55rem;
+    background-color: var(--paper);
+    color: var(--ink);
+    border-radius: 2px;
+    line-height: 1;
   }
 
   .ratio-3-2 {

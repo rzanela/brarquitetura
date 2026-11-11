@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import SectionLabel from '../../components/SectionLabel.astro';
 import { buildWhatsAppUrl } from '../../data/whatsapp';
 import { getRelativeUrl } from '../../utils/url';
+import { hasWhatsApp } from '../../data/site';
 
 // A página lê os parâmetros ?nome= e ?projeto= se disponíveis na URL
 const clientName = Astro.url.searchParams.get('nome') || '';
@@ -48,6 +49,7 @@ const whatsappPostBriefingUrl = buildWhatsAppUrl({
           </div>
 
           <!-- Ação Imediata: WhatsApp Pós-Briefing (seção 7.2) -->
+          {hasWhatsApp && (
           <div class="whatsapp-immediate-action mt-xl hairline-top pt-lg">
             <span class="type-mono-label text-ink-2">Deseja adiantar o contato ou enviar fotos do terreno?</span>
             <div class="mt-sm">
@@ -63,6 +65,7 @@ const whatsappPostBriefingUrl = buildWhatsAppUrl({
               </a>
             </div>
           </div>
+          )}
 
           <!-- Links de Navegação -->
           <div class="back-navigation mt-xl hairline-top pt-md">

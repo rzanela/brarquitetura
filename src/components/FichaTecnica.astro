@@ -1,4 +1,6 @@
 ---
+import { confirmed, confirmedList } from '../utils/pending';
+
 interface Props {
   local: string;
   ano: number;
@@ -16,10 +18,15 @@ const {
   area_m2,
   categoria,
   status,
-  equipe,
-  fotografia,
-  premios,
+  premios: premiosRaw,
+  equipe: equipeRaw,
+  fotografia: fotografiaRaw,
 } = Astro.props;
+
+// Créditos e prêmios pendentes ([VALIDAR]/[SUBSTITUIR]) não aparecem na ficha
+const equipe = confirmedList(equipeRaw);
+const fotografia = confirmed(fotografiaRaw);
+const premios = confirmedList(premiosRaw);
 
 const formatCategoria = {
   residencial: 'Residencial',
